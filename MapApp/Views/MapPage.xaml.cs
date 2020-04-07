@@ -45,6 +45,11 @@ namespace MapApp.Views
             set { Set(ref _center, value); }
         }
 
+        private Geopoint _addPinGeoposition = null;
+        private MapElement _tmpMapElement = null;
+        private MapElement _editedMapElement = null;
+        private bool _mapClickWasElementClick = false;
+
         public MapPage()
         {
             _locationService = new LocationService();
@@ -124,6 +129,32 @@ namespace MapApp.Views
             mapControl.MapElements.Add(mapIcon);
         }
 
+        private MapIcon AddTmpMapIcon(Geopoint position)
+        {
+            MapIcon mapIcon = new MapIcon()
+            {
+                Location = position,
+                NormalizedAnchorPoint = new Point(0.5, 1.0),
+                Title = "",
+                Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/tmpMapPin.png")),
+                ZIndex = 0
+            };
+            mapControl.MapElements.Add(mapIcon);
+
+            _tmpMapElement = mapIcon;
+
+            return mapIcon;
+        }
+
+        private void RemoveTmpMapIcon()
+        {
+            if (_tmpMapElement != null)
+            {
+                mapControl.MapElements.Remove(_tmpMapElement);
+                _tmpMapElement = null;
+            }
+        }
+
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
@@ -138,5 +169,80 @@ namespace MapApp.Views
         }
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        private void MapControl_MapTapped(MapControl sender, MapInputEventArgs args)
+        {
+            if (!_mapClickWasElementClick)
+            {
+                //addPinFlyout.ShowAt(rect);
+                flyoutGrid.ContextFlyout = this.Resources["AddPinFlyout"] as Flyout;
+                flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
+                _addPinGeoposition = args.Location;
+                AddTmpMapIcon(_addPinGeoposition);
+            }
+
+            _mapClickWasElementClick = false;
+        }
+
+        private void AddPinFlyout_Closed(object sender, object e)
+        {
+            addPinFlyoutTextBox.Text = "";
+            RemoveTmpMapIcon();
+        }
+
+        private void AddPinButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (_addPinGeoposition != null)
+            {
+                AddMapIcon(_addPinGeoposition, addPinFlyoutTextBox.Text);
+                _addPinGeoposition = null;
+            }
+
+            flyoutGrid.ContextFlyout.Hide();
+        }
+
+        private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
+        {
+            if (args.MapElements.Count > 0)
+            {
+                flyoutGrid.ContextFlyout = editPinFlyout;
+                flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
+                _editedMapElement = args.MapElements[0];
+
+                if (_editedMapElement.GetType() == typeof(MapIcon))
+                {
+                    editPinFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
+                }
+
+                _mapClickWasElementClick = true;
+            }
+        }
+
+        private void EditPinSaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (_editedMapElement.GetType() == typeof(MapIcon))
+            {
+                (_editedMapElement as MapIcon).Title = editPinFlyoutTextBox.Text;
+            }
+        }
+
+        private void EditPinDeleteButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            mapControl.MapElements.Remove(_editedMapElement);
+            editPinFlyout.Hide();
+        }
+
+        private void EditPinFlyout_Closed(object sender, object e)
+        {
+            editPinFlyoutTextBox.Text = "";
+        }
+
+        private void EditPinFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        {
+            if (e.Key == Windows.System.VirtualKey.Enter)
+            {
+                EditPinSaveButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
+            }
+        }
     }
 }
