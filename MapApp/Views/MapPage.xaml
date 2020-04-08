@@ -87,7 +87,7 @@
             ZoomLevel="{x:Bind ZoomLevel, Mode=OneWay}"
             Center="{x:Bind Center, Mode=OneWay}"
             MapTapped="MapControl_MapTapped"
-            MapElementClick="MapControl_MapElementClick" >
+            MapElementClick="MapControl_MapElementClick">
         </maps:MapControl>
         <Grid  VerticalAlignment="Stretch" >
             <Grid.RowDefinitions>

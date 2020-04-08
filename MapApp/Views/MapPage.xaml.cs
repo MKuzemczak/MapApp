@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
@@ -48,11 +49,7 @@ namespace MapApp.Views
             set { Set(ref _center, value); }
         }
 
-        private MapElement _tmpMapElement
-        {
-            get;
-            set;
-        }
+        private List<MapElement> TmpMapElements = new List<MapElement>();
         private MapElement _editedMapElement = null;
         private bool _mapClickWasElementClick = false;
 
@@ -156,7 +153,7 @@ namespace MapApp.Views
 
         private void AddTmpMapPoint(Geopoint position)
         {
-            if (_tmpMapElement is MapIcon)
+            if (TmpMapElements.Count == 1)
             {
                 MapPolyline polyline = new MapPolyline
                 {
@@ -164,8 +161,8 @@ namespace MapApp.Views
                     {
                         new BasicGeoposition()
                         {
-                            Longitude = (_tmpMapElement as MapIcon).Location.Position.Longitude,
-                            Latitude = (_tmpMapElement as MapIcon).Location.Position.Latitude
+                            Longitude = (TmpMapElements[0] as MapIcon).Location.Position.Longitude,
+                            Latitude = (TmpMapElements[0] as MapIcon).Location.Position.Latitude
                         },
                         new BasicGeoposition()
                         {
@@ -176,43 +173,38 @@ namespace MapApp.Views
                     ZIndex = 0,
                     StrokeColor = Color.FromArgb(255, 100,100,100)
                 };
-                mapControl.MapElements.Remove(_tmpMapElement);
-                _tmpMapElement = polyline;
-                mapControl.MapElements.Add(_tmpMapElement);
+
+                TmpMapElements.Insert(0, polyline);
+                mapControl.MapElements.Add(polyline);
 
             }
-            else if (_tmpMapElement is MapPolyline)
+            else if (TmpMapElements.Count > 1)
             {
-                List<BasicGeoposition> positions = new List<BasicGeoposition>((_tmpMapElement as MapPolyline).Path.Positions)
+                List<BasicGeoposition> positions = new List<BasicGeoposition>((TmpMapElements[0] as MapPolyline).Path.Positions)
                 {
                     new BasicGeoposition() { Latitude = position.Position.Latitude, Longitude = position.Position.Longitude }
                 };
                 
-                (_tmpMapElement as MapPolyline).Path = new Geopath(positions);
+                (TmpMapElements[0] as MapPolyline).Path = new Geopath(positions);
             }
-            else if (_tmpMapElement is null)
-            {
-                MapIcon mapIcon = new MapIcon()
-                {
-                    Location = position,
-                    NormalizedAnchorPoint = new Point(0.5, 1.0),
-                    Title = "",
-                    Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/tmpMapPin.png")),
-                    ZIndex = 0
-                };
-                mapControl.MapElements.Add(mapIcon);
 
-                _tmpMapElement = mapIcon;
-            }
+            MapIcon mapIcon = new MapIcon()
+            {
+                Location = position,
+                NormalizedAnchorPoint = new Point(0.5, 1.0),
+                Title = "",
+                Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/tmpMapPin.png")),
+                ZIndex = 0
+            };
+            mapControl.MapElements.Add(mapIcon);
+            TmpMapElements.Add(mapIcon);
         }
 
         private void RemoveTmpMapElement()
         {
-            if (_tmpMapElement != null)
-            {
-                mapControl.MapElements.Remove(_tmpMapElement);
-                _tmpMapElement = null;
-            }
+            foreach (var item in TmpMapElements)
+                mapControl.MapElements.Remove(item);
+            TmpMapElements.Clear();
         }
 
         public void UpdateAddButtonsVisibility()
@@ -220,11 +212,11 @@ namespace MapApp.Views
             addPinButton.Visibility = Visibility.Collapsed;
             addPolylineButton.Visibility = Visibility.Collapsed;
             addPolygonButton.Visibility = Visibility.Collapsed;
-            if (_tmpMapElement is MapIcon)
+            if (TmpMapElements.Count == 1)
             {
                 addPinButton.Visibility = Visibility.Visible;
             }
-            else if (_tmpMapElement is MapPolyline)
+            else if (TmpMapElements.Count > 1)
             {
                 addPolylineButton.Visibility = Visibility.Visible;
                 addPolygonButton.Visibility = Visibility.Visible;
@@ -263,9 +255,9 @@ namespace MapApp.Views
 
         private void AddPinFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (_tmpMapElement is MapIcon)
+            if (TmpMapElements.Count == 1 && TmpMapElements[0] is MapIcon)
             {
-                AddMapIcon((_tmpMapElement as MapIcon).Location, addMapElementFlyoutTextBox.Text);
+                AddMapIcon((TmpMapElements[0] as MapIcon).Location, addMapElementFlyoutTextBox.Text);
                 RemoveTmpMapElement();
                 UpdateAddButtonsVisibility();
             }
@@ -275,9 +267,9 @@ namespace MapApp.Views
 
         private void AddPolylineFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (_tmpMapElement is MapPolyline)
+            if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
             {
-                AddMapPolyline(_tmpMapElement as MapPolyline);
+                AddMapPolyline(TmpMapElements[0] as MapPolyline);
                 RemoveTmpMapElement();
                 UpdateAddButtonsVisibility();
             }
@@ -287,9 +279,9 @@ namespace MapApp.Views
 
         private void AddPolygonFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (_tmpMapElement is MapPolyline)
+            if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
             {
-                AddMapPolygon((_tmpMapElement as MapPolyline).Path);
+                AddMapPolygon((TmpMapElements[0] as MapPolyline).Path);
                 RemoveTmpMapElement();
                 UpdateAddButtonsVisibility();
             }
@@ -364,5 +356,6 @@ namespace MapApp.Views
             flyoutGrid.ContextFlyout = addMapElementFlyout;
             addMapElementFlyout.ShowAt(flyoutGrid);
         }
+
     }
 }
