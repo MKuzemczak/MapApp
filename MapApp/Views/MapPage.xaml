@@ -36,11 +36,28 @@
                             <ColumnDefinition Width="4*" />
                             <ColumnDefinition Width="*" />
                         </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0"
-                                   HorizontalAlignment="Right"
-                                   Margin="0,5,5,0" Text="Name"/>
+                        <TextBlock x:Name="addMapElementFlyoutNameTextBlock"
+                            Grid.Column="0"
+                            HorizontalAlignment="Right"
+                            Margin="0,5,5,0"
+                            Text="Name"/>
                         <TextBox x:Name="addMapElementFlyoutTextBox"
                                  Grid.Column="1" />
+                        <Button x:Name="addMapElementFlyoutFillColorButton"
+                                Content="Pick a color"
+                                Grid.Column="1">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <ColorPicker x:Name="myColorPicker"
+                                                Color="Aqua"
+                                                ColorSpectrumShape="Box"
+                                                IsColorPreviewVisible="True"
+                                                IsColorChannelTextInputVisible="True"
+                                                IsHexInputVisible="True"
+                                                IsAlphaEnabled="True"/> 
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
                         <Button x:Name="addMapElementFlyoutButton"
                                 Grid.Column="2"
                                 HorizontalAlignment="Center"

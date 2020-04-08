@@ -387,6 +387,8 @@ namespace MapApp.Views
         private void OpenAddPolylineFlyout(object sender, RoutedEventArgs e)
         {
             addFlyoutTitleTextBox.Text = "Add polyline";
+            addMapElementFlyoutNameTextBlock.Visibility = Visibility.Collapsed;
+            addMapElementFlyoutTextBox.Visibility = Visibility.Collapsed;
             addMapElementFlyoutButton.Click += AddPolylineFlyoutButton_Click;
             flyoutGrid.ContextFlyout = addMapElementFlyout;
             addMapElementFlyout.ShowAt(flyoutGrid);
