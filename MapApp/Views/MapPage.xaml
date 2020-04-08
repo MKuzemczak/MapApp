@@ -9,45 +9,76 @@
     mc:Ignorable="d">
 
     <Page.Resources>
-        <Flyout
-            x:Key="AddPinFlyout"
-            Placement="Bottom"
-            Closed="AddPinFlyout_Closed" >
-            <StackPanel Width="300">
-                <TextBlock Height="30" Text="Add a pin" />
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="4*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" Text="Name"/>
-                    <TextBox x:Name="addPinFlyoutTextBox" Grid.Column="1" />
-                    <Button Grid.Column="2" HorizontalAlignment="Center" Content="Add" Click="AddPinButton_Click" />
-                </Grid>
-            </StackPanel>
-        </Flyout>
-        <Flyout
-            x:Name="editPinFlyout"
-            x:Key="EditPinFlyout"
-            Placement="Bottom"
-            Closed="EditPinFlyout_Closed">
-            <StackPanel Width="400">
-                <TextBlock Height="30" Text="Edit a pin" />
-                <Grid >
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="4*" />
-                        <ColumnDefinition Width="*" />
-                        <ColumnDefinition Width="*" />
-                    </Grid.ColumnDefinitions>
-                    <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" Text="Name"/>
-                    <TextBox x:Name="editPinFlyoutTextBox" KeyDown="EditPinFlyoutTextBox_KeyDown" Grid.Column="1" />
-                    <Button Grid.Column="2" HorizontalAlignment="Center" Content="Save" Click="EditPinSaveButton_Click" />
-                    <Button Grid.Column="3" HorizontalAlignment="Center" Content="Delete" Click="EditPinDeleteButton_Click" />
-                </Grid>
-            </StackPanel>
-        </Flyout>
+        <ResourceDictionary >
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#536edb"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#536edb"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#536edb"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#536edb"/>
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
+            <Flyout
+                x:Name="addMapElementFlyout"
+                x:Key="AddMapElementFlyout"
+                Placement="Bottom"
+                Closing="AddPinFlyout_Closing" >
+                <StackPanel Width="300">
+                    <TextBlock
+                        x:Name="addFlyoutTitleTextBox"
+                        Height="30"
+                        Text="Add a pin" />
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,5,5,0" Text="Name"/>
+                        <TextBox x:Name="addMapElementFlyoutTextBox"
+                                 Grid.Column="1" />
+                        <Button x:Name="addMapElementFlyoutButton"
+                                Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                Content="Add" />
+                    </Grid>
+                </StackPanel>
+            </Flyout>
+            <Flyout
+                x:Name="editMapElementFlyout"
+                x:Key="EditMapElementFlyout"
+                Placement="Bottom"
+                Closed="EditMapElementFlyout_Closed">
+                <StackPanel Width="400">
+                    <TextBlock Height="30" Text="Edit a MapElement" />
+                    <Grid >
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="4*" />
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="*" />
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" Text="Name"/>
+                        <TextBox x:Name="editMapElementFlyoutTextBox"
+                                 KeyDown="EditMapElementFlyoutTextBox_KeyDown"
+                                 Grid.Column="1" />
+                        <Button Grid.Column="2"
+                                HorizontalAlignment="Center"
+                                Content="Save"
+                                Click="EditMapElementSaveFlyoutButton_Click" />
+                        <Button Grid.Column="3"
+                                HorizontalAlignment="Center"
+                                Content="Delete"
+                                Click="EditMapElementDeleteFlyoutButton_Click" />
+                    </Grid>
+                </StackPanel>
+            </Flyout>
+
+        </ResourceDictionary>
     </Page.Resources>
 
     <Grid>
@@ -64,7 +95,34 @@
                 <RowDefinition Height="5*" />
                 <RowDefinition Height="*" />
             </Grid.RowDefinitions>
-            <Button Content="Add line" VerticalAlignment="Top" Grid.Row="0"/>
+            <StackPanel
+                Grid.Row="2"
+                Orientation="Horizontal"
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center">
+                <Button
+                    x:Name="addPolylineButton"
+                    Content="Add polyline"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource MapButtonStyle}"
+                    Click="OpenAddPolylineFlyout"
+                    Visibility="Collapsed">
+                </Button>
+                <Button
+                    x:Name="addPolygonButton"
+                    Content="Add polygon"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource MapButtonStyle}"
+                    Click="OpenAddPolygonFlyout"
+                    Visibility="Collapsed"/>
+                <Button
+                    x:Name="addPinButton"
+                    Content="Add pin"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource MapButtonStyle}"
+                    Click="OpenAddPinFlyout"
+                    Visibility="Collapsed"/>
+            </StackPanel>
             <Grid x:Name="flyoutGrid" Grid.Row="1">
                 
             </Grid>

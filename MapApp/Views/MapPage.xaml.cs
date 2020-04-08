@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
@@ -9,6 +10,8 @@ using MapApp.Services;
 using Windows.Devices.Geolocation;
 using Windows.Foundation;
 using Windows.Storage.Streams;
+using Windows.UI;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Navigation;
@@ -45,8 +48,11 @@ namespace MapApp.Views
             set { Set(ref _center, value); }
         }
 
-        private Geopoint _addPinGeoposition = null;
-        private MapElement _tmpMapElement = null;
+        private MapElement _tmpMapElement
+        {
+            get;
+            set;
+        }
         private MapElement _editedMapElement = null;
         private bool _mapClickWasElementClick = false;
 
@@ -61,6 +67,7 @@ namespace MapApp.Views
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await InitializeAsync();
+            UpdateAddButtonsVisibility();
         }
 
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -129,29 +136,98 @@ namespace MapApp.Views
             mapControl.MapElements.Add(mapIcon);
         }
 
-        private MapIcon AddTmpMapIcon(Geopoint position)
+        private void AddMapPolyline(MapPolyline polyline)
         {
-            MapIcon mapIcon = new MapIcon()
-            {
-                Location = position,
-                NormalizedAnchorPoint = new Point(0.5, 1.0),
-                Title = "",
-                Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/tmpMapPin.png")),
-                ZIndex = 0
-            };
-            mapControl.MapElements.Add(mapIcon);
-
-            _tmpMapElement = mapIcon;
-
-            return mapIcon;
+            polyline.StrokeColor = Color.FromArgb(255, 255, 0, 0);
+            mapControl.MapElements.Add(polyline);
         }
 
-        private void RemoveTmpMapIcon()
+        private void AddMapPolygon(Geopath path)
+        {
+            MapPolygon polygon = new MapPolygon()
+            {
+                FillColor = Color.FromArgb(100, 0, 0, 255),
+                StrokeColor = Color.FromArgb(200, 0, 0, 255),
+                ZIndex = 0
+            };
+            polygon.Paths.Add(path);
+            mapControl.MapElements.Add(polygon);
+        }
+
+        private void AddTmpMapPoint(Geopoint position)
+        {
+            if (_tmpMapElement is MapIcon)
+            {
+                MapPolyline polyline = new MapPolyline
+                {
+                    Path = new Geopath(new List<BasicGeoposition>()
+                    {
+                        new BasicGeoposition()
+                        {
+                            Longitude = (_tmpMapElement as MapIcon).Location.Position.Longitude,
+                            Latitude = (_tmpMapElement as MapIcon).Location.Position.Latitude
+                        },
+                        new BasicGeoposition()
+                        {
+                            Longitude = position.Position.Longitude,
+                            Latitude = position.Position.Latitude
+                        }
+                    }),
+                    ZIndex = 0,
+                    StrokeColor = Color.FromArgb(255, 100,100,100)
+                };
+                mapControl.MapElements.Remove(_tmpMapElement);
+                _tmpMapElement = polyline;
+                mapControl.MapElements.Add(_tmpMapElement);
+
+            }
+            else if (_tmpMapElement is MapPolyline)
+            {
+                List<BasicGeoposition> positions = new List<BasicGeoposition>((_tmpMapElement as MapPolyline).Path.Positions)
+                {
+                    new BasicGeoposition() { Latitude = position.Position.Latitude, Longitude = position.Position.Longitude }
+                };
+                
+                (_tmpMapElement as MapPolyline).Path = new Geopath(positions);
+            }
+            else if (_tmpMapElement is null)
+            {
+                MapIcon mapIcon = new MapIcon()
+                {
+                    Location = position,
+                    NormalizedAnchorPoint = new Point(0.5, 1.0),
+                    Title = "",
+                    Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/tmpMapPin.png")),
+                    ZIndex = 0
+                };
+                mapControl.MapElements.Add(mapIcon);
+
+                _tmpMapElement = mapIcon;
+            }
+        }
+
+        private void RemoveTmpMapElement()
         {
             if (_tmpMapElement != null)
             {
                 mapControl.MapElements.Remove(_tmpMapElement);
                 _tmpMapElement = null;
+            }
+        }
+
+        public void UpdateAddButtonsVisibility()
+        {
+            addPinButton.Visibility = Visibility.Collapsed;
+            addPolylineButton.Visibility = Visibility.Collapsed;
+            addPolygonButton.Visibility = Visibility.Collapsed;
+            if (_tmpMapElement is MapIcon)
+            {
+                addPinButton.Visibility = Visibility.Visible;
+            }
+            else if (_tmpMapElement is MapPolyline)
+            {
+                addPolylineButton.Visibility = Visibility.Visible;
+                addPolygonButton.Visibility = Visibility.Visible;
             }
         }
 
@@ -174,75 +250,119 @@ namespace MapApp.Views
         {
             if (!_mapClickWasElementClick)
             {
-                //addPinFlyout.ShowAt(rect);
-                flyoutGrid.ContextFlyout = this.Resources["AddPinFlyout"] as Flyout;
-                flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
-                _addPinGeoposition = args.Location;
-                AddTmpMapIcon(_addPinGeoposition);
+                AddTmpMapPoint(args.Location);
+                UpdateAddButtonsVisibility();
             }
-
             _mapClickWasElementClick = false;
         }
 
-        private void AddPinFlyout_Closed(object sender, object e)
+        private void AddPinFlyout_Closing(object sender, object e)
         {
-            addPinFlyoutTextBox.Text = "";
-            RemoveTmpMapIcon();
+            addMapElementFlyoutTextBox.Text = "";
         }
 
-        private void AddPinButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void AddPinFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
-            if (_addPinGeoposition != null)
+            if (_tmpMapElement is MapIcon)
             {
-                AddMapIcon(_addPinGeoposition, addPinFlyoutTextBox.Text);
-                _addPinGeoposition = null;
+                AddMapIcon((_tmpMapElement as MapIcon).Location, addMapElementFlyoutTextBox.Text);
+                RemoveTmpMapElement();
+                UpdateAddButtonsVisibility();
             }
+            addMapElementFlyoutButton.Click -= AddPinFlyoutButton_Click;
+            addMapElementFlyout.Hide();
+        }
 
-            flyoutGrid.ContextFlyout.Hide();
+        private void AddPolylineFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (_tmpMapElement is MapPolyline)
+            {
+                AddMapPolyline(_tmpMapElement as MapPolyline);
+                RemoveTmpMapElement();
+                UpdateAddButtonsVisibility();
+            }
+            addMapElementFlyoutButton.Click -= AddPolylineFlyoutButton_Click;
+            addMapElementFlyout.Hide();
+        }
+
+        private void AddPolygonFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        {
+            if (_tmpMapElement is MapPolyline)
+            {
+                AddMapPolygon((_tmpMapElement as MapPolyline).Path);
+                RemoveTmpMapElement();
+                UpdateAddButtonsVisibility();
+            }
+            addMapElementFlyoutButton.Click -= AddPolygonFlyoutButton_Click;
+            addMapElementFlyout.Hide();
         }
 
         private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
         {
             if (args.MapElements.Count > 0)
             {
-                flyoutGrid.ContextFlyout = editPinFlyout;
+                flyoutGrid.ContextFlyout = editMapElementFlyout;
                 flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
                 _editedMapElement = args.MapElements[0];
 
                 if (_editedMapElement.GetType() == typeof(MapIcon))
                 {
-                    editPinFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
+                    editMapElementFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
                 }
 
                 _mapClickWasElementClick = true;
             }
         }
 
-        private void EditPinSaveButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void EditMapElementSaveFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             if (_editedMapElement.GetType() == typeof(MapIcon))
             {
-                (_editedMapElement as MapIcon).Title = editPinFlyoutTextBox.Text;
+                (_editedMapElement as MapIcon).Title = editMapElementFlyoutTextBox.Text;
             }
         }
 
-        private void EditPinDeleteButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private void EditMapElementDeleteFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             mapControl.MapElements.Remove(_editedMapElement);
-            editPinFlyout.Hide();
+            editMapElementFlyout.Hide();
         }
 
-        private void EditPinFlyout_Closed(object sender, object e)
+        private void EditMapElementFlyout_Closed(object sender, object e)
         {
-            editPinFlyoutTextBox.Text = "";
+            editMapElementFlyoutTextBox.Text = "";
         }
 
-        private void EditPinFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        private void EditMapElementFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
         {
             if (e.Key == Windows.System.VirtualKey.Enter)
             {
-                EditPinSaveButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
+                EditMapElementSaveFlyoutButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
             }
+        }
+
+        private void OpenAddPolylineFlyout(object sender, RoutedEventArgs e)
+        {
+            addFlyoutTitleTextBox.Text = "Add polyline";
+            addMapElementFlyoutButton.Click += AddPolylineFlyoutButton_Click;
+            flyoutGrid.ContextFlyout = addMapElementFlyout;
+            addMapElementFlyout.ShowAt(flyoutGrid);
+        }
+
+        private void OpenAddPolygonFlyout(object sender, RoutedEventArgs e)
+        {
+            addFlyoutTitleTextBox.Text = "Add polygon";
+            addMapElementFlyoutButton.Click += AddPolygonFlyoutButton_Click;
+            flyoutGrid.ContextFlyout = addMapElementFlyout;
+            addMapElementFlyout.ShowAt(flyoutGrid);
+        }
+
+        private void OpenAddPinFlyout(object sender, RoutedEventArgs e)
+        {
+            addFlyoutTitleTextBox.Text = "Add pin";
+            addMapElementFlyoutButton.Click += AddPinFlyoutButton_Click;
+            flyoutGrid.ContextFlyout = addMapElementFlyout;
+            addMapElementFlyout.ShowAt(flyoutGrid);
         }
     }
 }

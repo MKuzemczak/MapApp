@@ -1,0 +1,11 @@
+﻿<ResourceDictionary
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation" 
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MapApp.Styles">
+
+    <Style  x:Key="MapButtonStyle" TargetType="Button">
+        <Setter Property="Background" Value="#FF79BDFF" />
+        <Setter Property="CornerRadius" Value="0" />
+    </Style>
+    
+</ResourceDictionary>
