@@ -4,7 +4,7 @@
     xmlns:local="using:MapApp.Styles">
 
     <Style  x:Key="MapButtonStyle" TargetType="Button">
-        <Setter Property="Background" Value="#FF79BDFF" />
+        <Setter Property="Background" Value="#AA000000" />
         <Setter Property="CornerRadius" Value="0" />
     </Style>
     

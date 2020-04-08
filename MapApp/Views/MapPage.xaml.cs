@@ -200,11 +200,42 @@ namespace MapApp.Views
             TmpMapElements.Add(mapIcon);
         }
 
-        private void RemoveTmpMapElement()
+        private void RemoveTmpMapElements()
         {
             foreach (var item in TmpMapElements)
                 mapControl.MapElements.Remove(item);
             TmpMapElements.Clear();
+        }
+
+        private void RemoveTmpPoint(MapIcon icon)
+        {
+            TmpMapElements.Remove(icon);
+            mapControl.MapElements.Remove(icon);
+
+            var iconPos = icon.Location.Position;
+
+            if (TmpMapElements.Count > 0 && TmpMapElements.First() is MapPolyline)
+            {
+                List<BasicGeoposition> path = new List<BasicGeoposition>((TmpMapElements.First() as MapPolyline).Path.Positions);
+                BasicGeoposition itemToRemove = new BasicGeoposition();
+                bool found = false;
+                foreach (var item in path)
+                {
+                    if ((Math.Abs(item.Latitude - iconPos.Latitude) < 0.000001 &&
+                        (Math.Abs(item.Longitude - iconPos.Longitude) < 0.000001)))
+                    {
+                        itemToRemove = item;
+                        found = true;
+                        break;
+                    }
+                }
+                if (found)
+                {
+                    path.Remove(itemToRemove);
+                    (TmpMapElements.First() as MapPolyline).Path = new Geopath(path);
+                }
+
+            }
         }
 
         public void UpdateAddButtonsVisibility()
@@ -219,8 +250,13 @@ namespace MapApp.Views
             else if (TmpMapElements.Count > 1)
             {
                 addPolylineButton.Visibility = Visibility.Visible;
-                addPolygonButton.Visibility = Visibility.Visible;
+
+                if (TmpMapElements.Count > 3)
+                {
+                    addPolygonButton.Visibility = Visibility.Visible;
+                }
             }
+
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
@@ -258,7 +294,7 @@ namespace MapApp.Views
             if (TmpMapElements.Count == 1 && TmpMapElements[0] is MapIcon)
             {
                 AddMapIcon((TmpMapElements[0] as MapIcon).Location, addMapElementFlyoutTextBox.Text);
-                RemoveTmpMapElement();
+                RemoveTmpMapElements();
                 UpdateAddButtonsVisibility();
             }
             addMapElementFlyoutButton.Click -= AddPinFlyoutButton_Click;
@@ -270,7 +306,7 @@ namespace MapApp.Views
             if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
             {
                 AddMapPolyline(TmpMapElements[0] as MapPolyline);
-                RemoveTmpMapElement();
+                RemoveTmpMapElements();
                 UpdateAddButtonsVisibility();
             }
             addMapElementFlyoutButton.Click -= AddPolylineFlyoutButton_Click;
@@ -282,7 +318,7 @@ namespace MapApp.Views
             if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
             {
                 AddMapPolygon((TmpMapElements[0] as MapPolyline).Path);
-                RemoveTmpMapElement();
+                RemoveTmpMapElements();
                 UpdateAddButtonsVisibility();
             }
             addMapElementFlyoutButton.Click -= AddPolygonFlyoutButton_Click;
@@ -291,7 +327,11 @@ namespace MapApp.Views
 
         private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
         {
-            if (args.MapElements.Count > 0)
+            if (TmpMapElements.Contains(args.MapElements.First()))
+            {
+                RemoveTmpPoint(args.MapElements.First() as MapIcon);
+            }
+            else
             {
                 flyoutGrid.ContextFlyout = editMapElementFlyout;
                 flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
@@ -301,9 +341,8 @@ namespace MapApp.Views
                 {
                     editMapElementFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
                 }
-
-                _mapClickWasElementClick = true;
             }
+            _mapClickWasElementClick = true;
         }
 
         private void EditMapElementSaveFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
@@ -357,5 +396,9 @@ namespace MapApp.Views
             addMapElementFlyout.ShowAt(flyoutGrid);
         }
 
+        private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
+        {
+            int a = 0;
+        }
     }
 }

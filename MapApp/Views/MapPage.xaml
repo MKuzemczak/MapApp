@@ -12,12 +12,12 @@
         <ResourceDictionary >
             <ResourceDictionary.ThemeDictionaries>
                 <ResourceDictionary x:Key="Dark">
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#536edb"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#536edb"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#CC000000"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#CC000000"/>
                 </ResourceDictionary>
                 <ResourceDictionary x:Key="Light">
-                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#536edb"/>
-                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#536edb"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPointerOver" Color="#CC000000"/>
+                    <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#CC000000"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             <Flyout
@@ -102,26 +102,37 @@
                 VerticalAlignment="Center">
                 <Button
                     x:Name="addPolylineButton"
-                    Content="Add polyline"
                     HorizontalAlignment="Center"
                     Style="{StaticResource MapButtonStyle}"
                     Click="OpenAddPolylineFlyout"
                     Visibility="Collapsed">
+                    <Image
+                        Height="30"
+                        Source="ms-appx:///Assets/Maps-Polyline-icon.png"
+                        ImageFailed="Image_ImageFailed" />
                 </Button>
                 <Button
                     x:Name="addPolygonButton"
-                    Content="Add polygon"
                     HorizontalAlignment="Center"
                     Style="{StaticResource MapButtonStyle}"
                     Click="OpenAddPolygonFlyout"
-                    Visibility="Collapsed"/>
+                    Visibility="Collapsed">
+                    <Image
+                        Height="30"
+                        Source="ms-appx:///Assets/Maps-Polygon-icon.png"
+                        ImageFailed="Image_ImageFailed" />
+                </Button>
                 <Button
                     x:Name="addPinButton"
-                    Content="Add pin"
                     HorizontalAlignment="Center"
                     Style="{StaticResource MapButtonStyle}"
                     Click="OpenAddPinFlyout"
-                    Visibility="Collapsed"/>
+                    Visibility="Collapsed">
+                    <Image
+                        Height="30"
+                        Source="ms-appx:///Assets/Map-Add-Pin-icon.png"
+                        ImageFailed="Image_ImageFailed" />
+                </Button>
             </StackPanel>
             <Grid x:Name="flyoutGrid" Grid.Row="1">
                 
