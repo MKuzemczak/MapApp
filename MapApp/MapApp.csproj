@@ -215,6 +215,7 @@
     <Compile Include="Helpers\ResourceExtensions.cs" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Cancel-icon.png" />
     <Content Include="Assets\Map-Add-Pin-icon.png" />
     <Content Include="Assets\map.png" />
     <Content Include="Assets\Maps-Polygon-icon.png" />

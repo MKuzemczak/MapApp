@@ -216,6 +216,12 @@ namespace MapApp.Views
 
             if (TmpMapElements.Count > 0 && TmpMapElements.First() is MapPolyline)
             {
+                if (TmpMapElements.Count == 2)
+                {
+                    mapControl.MapElements.Remove(TmpMapElements[0]);
+                    TmpMapElements.Remove(TmpMapElements[0]);
+                    return;
+                }
                 List<BasicGeoposition> path = new List<BasicGeoposition>((TmpMapElements.First() as MapPolyline).Path.Positions);
                 BasicGeoposition itemToRemove = new BasicGeoposition();
                 bool found = false;
@@ -243,17 +249,23 @@ namespace MapApp.Views
             addPinButton.Visibility = Visibility.Collapsed;
             addPolylineButton.Visibility = Visibility.Collapsed;
             addPolygonButton.Visibility = Visibility.Collapsed;
-            if (TmpMapElements.Count == 1)
-            {
-                addPinButton.Visibility = Visibility.Visible;
-            }
-            else if (TmpMapElements.Count > 1)
-            {
-                addPolylineButton.Visibility = Visibility.Visible;
+            cancelButton.Visibility = Visibility.Collapsed;
 
-                if (TmpMapElements.Count > 3)
+            if (TmpMapElements.Count > 0)
+            {
+                cancelButton.Visibility = Visibility.Visible;
+                if (TmpMapElements.Count == 1)
                 {
-                    addPolygonButton.Visibility = Visibility.Visible;
+                    addPinButton.Visibility = Visibility.Visible;
+                }
+                else if (TmpMapElements.Count > 1)
+                {
+                    addPolylineButton.Visibility = Visibility.Visible;
+
+                    if (TmpMapElements.Count > 3)
+                    {
+                        addPolygonButton.Visibility = Visibility.Visible;
+                    }
                 }
             }
 
@@ -399,6 +411,12 @@ namespace MapApp.Views
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             int a = 0;
+        }
+
+        private void CancelButton_Click(object sender, RoutedEventArgs e)
+        {
+            RemoveTmpMapElements();
+            UpdateAddButtonsVisibility();
         }
     }
 }

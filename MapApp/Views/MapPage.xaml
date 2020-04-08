@@ -133,6 +133,17 @@
                         Source="ms-appx:///Assets/Map-Add-Pin-icon.png"
                         ImageFailed="Image_ImageFailed" />
                 </Button>
+                <Button
+                    x:Name="cancelButton"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource MapButtonStyle}"
+                    Click="CancelButton_Click"
+                    Visibility="Collapsed">
+                    <Image
+                        Height="30"
+                        Source="ms-appx:///Assets/Cancel-icon.png"
+                        ImageFailed="Image_ImageFailed" />
+                </Button>
             </StackPanel>
             <Grid x:Name="flyoutGrid" Grid.Row="1">
                 
