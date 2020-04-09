@@ -133,18 +133,23 @@ namespace MapApp.Views
             mapControl.MapElements.Add(mapIcon);
         }
 
-        private void AddMapPolyline(MapPolyline polyline)
+        private void AddMapPolyline(Geopath path, Color strokeColor)
         {
-            polyline.StrokeColor = Color.FromArgb(255, 255, 0, 0);
+            MapPolyline polyline = new MapPolyline()
+            {
+                Path = path,
+                ZIndex = 0,
+                StrokeColor = strokeColor
+            };
             mapControl.MapElements.Add(polyline);
         }
 
-        private void AddMapPolygon(Geopath path)
+        private void AddMapPolygon(Geopath path, Color fillColor, Color strokeColor)
         {
             MapPolygon polygon = new MapPolygon()
             {
-                FillColor = Color.FromArgb(100, 0, 0, 255),
-                StrokeColor = Color.FromArgb(200, 0, 0, 255),
+                FillColor = fillColor,
+                StrokeColor = strokeColor,
                 ZIndex = 0
             };
             polygon.Paths.Add(path);
@@ -296,47 +301,6 @@ namespace MapApp.Views
             _mapClickWasElementClick = false;
         }
 
-        private void AddPinFlyout_Closing(object sender, object e)
-        {
-            addMapElementFlyoutTextBox.Text = "";
-        }
-
-        private void AddPinFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (TmpMapElements.Count == 1 && TmpMapElements[0] is MapIcon)
-            {
-                AddMapIcon((TmpMapElements[0] as MapIcon).Location, addMapElementFlyoutTextBox.Text);
-                RemoveTmpMapElements();
-                UpdateAddButtonsVisibility();
-            }
-            addMapElementFlyoutButton.Click -= AddPinFlyoutButton_Click;
-            addMapElementFlyout.Hide();
-        }
-
-        private void AddPolylineFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
-            {
-                AddMapPolyline(TmpMapElements[0] as MapPolyline);
-                RemoveTmpMapElements();
-                UpdateAddButtonsVisibility();
-            }
-            addMapElementFlyoutButton.Click -= AddPolylineFlyoutButton_Click;
-            addMapElementFlyout.Hide();
-        }
-
-        private void AddPolygonFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (TmpMapElements.Count > 1 && TmpMapElements[0] is MapPolyline)
-            {
-                AddMapPolygon((TmpMapElements[0] as MapPolyline).Path);
-                RemoveTmpMapElements();
-                UpdateAddButtonsVisibility();
-            }
-            addMapElementFlyoutButton.Click -= AddPolygonFlyoutButton_Click;
-            addMapElementFlyout.Hide();
-        }
-
         private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
         {
             if (TmpMapElements.Contains(args.MapElements.First()))
@@ -345,8 +309,8 @@ namespace MapApp.Views
             }
             else
             {
-                flyoutGrid.ContextFlyout = editMapElementFlyout;
-                flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
+                //flyoutGrid.ContextFlyout = editMapElementFlyout;
+                //flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
                 _editedMapElement = args.MapElements[0];
 
                 if (_editedMapElement.GetType() == typeof(MapIcon))
@@ -384,32 +348,6 @@ namespace MapApp.Views
             }
         }
 
-        private void OpenAddPolylineFlyout(object sender, RoutedEventArgs e)
-        {
-            addFlyoutTitleTextBox.Text = "Add polyline";
-            addMapElementFlyoutNameTextBlock.Visibility = Visibility.Collapsed;
-            addMapElementFlyoutTextBox.Visibility = Visibility.Collapsed;
-            addMapElementFlyoutButton.Click += AddPolylineFlyoutButton_Click;
-            flyoutGrid.ContextFlyout = addMapElementFlyout;
-            addMapElementFlyout.ShowAt(flyoutGrid);
-        }
-
-        private void OpenAddPolygonFlyout(object sender, RoutedEventArgs e)
-        {
-            addFlyoutTitleTextBox.Text = "Add polygon";
-            addMapElementFlyoutButton.Click += AddPolygonFlyoutButton_Click;
-            flyoutGrid.ContextFlyout = addMapElementFlyout;
-            addMapElementFlyout.ShowAt(flyoutGrid);
-        }
-
-        private void OpenAddPinFlyout(object sender, RoutedEventArgs e)
-        {
-            addFlyoutTitleTextBox.Text = "Add pin";
-            addMapElementFlyoutButton.Click += AddPinFlyoutButton_Click;
-            flyoutGrid.ContextFlyout = addMapElementFlyout;
-            addMapElementFlyout.ShowAt(flyoutGrid);
-        }
-
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
             int a = 0;
@@ -417,6 +355,27 @@ namespace MapApp.Views
 
         private void CancelButton_Click(object sender, RoutedEventArgs e)
         {
+            RemoveTmpMapElements();
+            UpdateAddButtonsVisibility();
+        }
+
+        private void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        {
+            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path, e.BorderColor);
+            RemoveTmpMapElements();
+            UpdateAddButtonsVisibility();
+        }
+
+        private void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        {
+            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path, e.FillColor, e.BorderColor);
+            RemoveTmpMapElements();
+            UpdateAddButtonsVisibility();
+        }
+
+        private void AddPinButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        {
+            AddMapIcon((TmpMapElements.Last() as MapIcon).Location, e.Name);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }

@@ -5,6 +5,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:MapApp.Controls" 
     Style="{StaticResource PageStyle}"
     mc:Ignorable="d">
 
@@ -20,51 +21,7 @@
                     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#CC000000"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-            <Flyout
-                x:Name="addMapElementFlyout"
-                x:Key="AddMapElementFlyout"
-                Placement="Bottom"
-                Closing="AddPinFlyout_Closing" >
-                <StackPanel Width="300">
-                    <TextBlock
-                        x:Name="addFlyoutTitleTextBox"
-                        Height="30"
-                        Text="Add a pin" />
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="4*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock x:Name="addMapElementFlyoutNameTextBlock"
-                            Grid.Column="0"
-                            HorizontalAlignment="Right"
-                            Margin="0,5,5,0"
-                            Text="Name"/>
-                        <TextBox x:Name="addMapElementFlyoutTextBox"
-                                 Grid.Column="1" />
-                        <Button x:Name="addMapElementFlyoutFillColorButton"
-                                Content="Pick a color"
-                                Grid.Column="1">
-                            <Button.Flyout>
-                                <Flyout>
-                                    <ColorPicker x:Name="myColorPicker"
-                                                Color="Aqua"
-                                                ColorSpectrumShape="Box"
-                                                IsColorPreviewVisible="True"
-                                                IsColorChannelTextInputVisible="True"
-                                                IsHexInputVisible="True"
-                                                IsAlphaEnabled="True"/> 
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <Button x:Name="addMapElementFlyoutButton"
-                                Grid.Column="2"
-                                HorizontalAlignment="Center"
-                                Content="Add" />
-                    </Grid>
-                </StackPanel>
-            </Flyout>
+            
             <Flyout
                 x:Name="editMapElementFlyout"
                 x:Key="EditMapElementFlyout"
@@ -117,7 +74,7 @@
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
-                <Button
+                <!--<Button
                     x:Name="addPolylineButton"
                     HorizontalAlignment="Center"
                     Style="{StaticResource MapButtonStyle}"
@@ -138,8 +95,8 @@
                         Height="30"
                         Source="ms-appx:///Assets/Maps-Polygon-icon.png"
                         ImageFailed="Image_ImageFailed" />
-                </Button>
-                <Button
+                </Button>-->
+                <!--<Button
                     x:Name="addPinButton"
                     HorizontalAlignment="Center"
                     Style="{StaticResource MapButtonStyle}"
@@ -149,7 +106,23 @@
                         Height="30"
                         Source="ms-appx:///Assets/Map-Add-Pin-icon.png"
                         ImageFailed="Image_ImageFailed" />
-                </Button>
+                </Button>-->
+                <controls:AddMapElementButton x:Name="addPolylineButton"
+                                              ContentSource="ms-appx:///Assets/Maps-Polyline-icon.png"
+                                              Visibility="Collapsed"
+                                              IsBorderColorPickVisible="True"
+                                              AddClicked="AddPolylineButton_AddClicked"/>
+                <controls:AddMapElementButton x:Name="addPolygonButton"
+                                              ContentSource="ms-appx:///Assets/Maps-Polygon-icon.png"
+                                              Visibility="Collapsed"
+                                              IsBorderColorPickVisible="True"
+                                              IsFillColorPickVisible="True"
+                                              AddClicked="AddPolygonButton_AddClicked"/>
+                <controls:AddMapElementButton x:Name="addPinButton"
+                                              ContentSource="ms-appx:///Assets/Map-Add-Pin-icon.png"
+                                              Visibility="Collapsed"
+                                              IsNameTextBoxVisible="True"
+                                              AddClicked="AddPinButton_AddClicked"/>
                 <Button
                     x:Name="cancelButton"
                     HorizontalAlignment="Center"
@@ -157,14 +130,18 @@
                     Click="CancelButton_Click"
                     Visibility="Collapsed">
                     <Image
-                        Height="30"
                         Source="ms-appx:///Assets/Cancel-icon.png"
                         ImageFailed="Image_ImageFailed" />
                 </Button>
             </StackPanel>
-            <Grid x:Name="flyoutGrid" Grid.Row="1">
+            <!--<controls:AddMapElementFlyout x:Name="addMapElementFlyout"
+                                          Grid.Row="1"
+                                          Width="600"
+                                          Height="600"
+                                          HorizontalAlignment="Center"/>-->
+            <!--<Grid x:Name="flyoutGrid" Grid.Row="1">
                 
-            </Grid>
+            </Grid>-->
         </Grid>
     </Grid>
 </Page>

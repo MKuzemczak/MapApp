@@ -137,8 +137,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Activation\ActivationHandler.cs" />
-    <Compile Include="Controls\AddMapElementFlyout.xaml.cs">
-      <DependentUpon>AddMapElementFlyout.xaml</DependentUpon>
+    <Compile Include="Controls\AddMapElementButton.xaml.cs">
+      <DependentUpon>AddMapElementButton.xaml</DependentUpon>
     </Compile>
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\NavHelper.cs" />
@@ -172,7 +172,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <Page Include="Controls\AddMapElementFlyout.xaml">
+    <Page Include="Controls\AddMapElementButton.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
