@@ -26,5 +26,11 @@ namespace MapApp.Views
         {
             this.InitializeComponent();
         }
+
+        private void MapPage_MapElementClick(object sender, MapElementClickedEventArgs e)
+        {
+            splitView.IsPaneOpen = true;
+            detailsPage.SelectItem(e.Element);
+        }
     }
 }

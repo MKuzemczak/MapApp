@@ -74,47 +74,16 @@
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
-                <!--<Button
-                    x:Name="addPolylineButton"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource MapButtonStyle}"
-                    Click="OpenAddPolylineFlyout"
-                    Visibility="Collapsed">
-                    <Image
-                        Height="30"
-                        Source="ms-appx:///Assets/Maps-Polyline-icon.png"
-                        ImageFailed="Image_ImageFailed" />
-                </Button>
-                <Button
-                    x:Name="addPolygonButton"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource MapButtonStyle}"
-                    Click="OpenAddPolygonFlyout"
-                    Visibility="Collapsed">
-                    <Image
-                        Height="30"
-                        Source="ms-appx:///Assets/Maps-Polygon-icon.png"
-                        ImageFailed="Image_ImageFailed" />
-                </Button>-->
-                <!--<Button
-                    x:Name="addPinButton"
-                    HorizontalAlignment="Center"
-                    Style="{StaticResource MapButtonStyle}"
-                    Click="OpenAddPinFlyout"
-                    Visibility="Collapsed">
-                    <Image
-                        Height="30"
-                        Source="ms-appx:///Assets/Map-Add-Pin-icon.png"
-                        ImageFailed="Image_ImageFailed" />
-                </Button>-->
                 <controls:AddMapElementButton x:Name="addPolylineButton"
                                               ContentSource="ms-appx:///Assets/Maps-Polyline-icon.png"
                                               Visibility="Collapsed"
+                                              IsNameTextBoxVisible="True"
                                               IsBorderColorPickVisible="True"
                                               AddClicked="AddPolylineButton_AddClicked"/>
                 <controls:AddMapElementButton x:Name="addPolygonButton"
                                               ContentSource="ms-appx:///Assets/Maps-Polygon-icon.png"
                                               Visibility="Collapsed"
+                                              IsNameTextBoxVisible="True"
                                               IsBorderColorPickVisible="True"
                                               IsFillColorPickVisible="True"
                                               AddClicked="AddPolygonButton_AddClicked"/>
@@ -134,14 +103,6 @@
                         ImageFailed="Image_ImageFailed" />
                 </Button>
             </StackPanel>
-            <!--<controls:AddMapElementFlyout x:Name="addMapElementFlyout"
-                                          Grid.Row="1"
-                                          Width="600"
-                                          Height="600"
-                                          HorizontalAlignment="Center"/>-->
-            <!--<Grid x:Name="flyoutGrid" Grid.Row="1">
-                
-            </Grid>-->
         </Grid>
     </Grid>
 </Page>

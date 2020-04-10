@@ -11,12 +11,16 @@
 
     <Grid>
         <SplitView x:Name="splitView"
-                   IsPaneOpen="True"
+                   IsPaneOpen="False"
                    DisplayMode="Overlay"
                    OpenPaneLength="500"
                    PanePlacement="Left">
+            <SplitView.Pane>
+                <views:DetailsPage x:Name="detailsPage" />
+            </SplitView.Pane>
             <Grid>
-                <views:MapPage x:Name="mapPage" />
+                <views:MapPage x:Name="mapPage"
+                               MapElementClick="MapPage_MapElementClick"/>
             </Grid>
         </SplitView>
     </Grid>

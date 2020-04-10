@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
 using MapApp.Helpers;
+using MapApp.Models;
 using MapApp.Services;
 
 using Windows.Devices.Geolocation;
@@ -49,6 +50,7 @@ namespace MapApp.Views
             set { Set(ref _center, value); }
         }
 
+        private List<MapElementItem> MapElements = new List<MapElementItem>();
         private List<MapElement> TmpMapElements = new List<MapElement>();
         private MapElement _editedMapElement = null;
         private bool _mapClickWasElementClick = false;
@@ -131,9 +133,16 @@ namespace MapApp.Views
                 ZIndex = 0
             };
             mapControl.MapElements.Add(mapIcon);
+            MapIconItem iconItem = new MapIconItem()
+            {
+                Element = mapIcon,
+                ParentLayerName = "Warstwa 0"
+            };
+
+            MapElements.Add(iconItem);
         }
 
-        private void AddMapPolyline(Geopath path, Color strokeColor)
+        private void AddMapPolyline(Geopath path, Color strokeColor, string name)
         {
             MapPolyline polyline = new MapPolyline()
             {
@@ -141,10 +150,12 @@ namespace MapApp.Views
                 ZIndex = 0,
                 StrokeColor = strokeColor
             };
-            mapControl.MapElements.Add(polyline);
+            MapPolylineItem item = MapPolylineItem.FromMapPolyline(polyline, name: name, parentLayerName: "Warstwa 0");
+            MapElements.Add(item);
+            mapControl.MapElements.Add(item.Element);
         }
 
-        private void AddMapPolygon(Geopath path, Color fillColor, Color strokeColor)
+        private void AddMapPolygon(Geopath path, Color fillColor, Color strokeColor, string name)
         {
             MapPolygon polygon = new MapPolygon()
             {
@@ -154,6 +165,18 @@ namespace MapApp.Views
             };
             polygon.Paths.Add(path);
             mapControl.MapElements.Add(polygon);
+
+            MapElements.Add(MapPolygonItem.FromPolygonItem(polygon, name, "Warstwa 0"));
+        }
+
+        public MapElementItem GetMapElementItemContaining(MapElement element)
+        {
+            foreach (var item in MapElements)
+            {
+                if (item.Element == element)
+                    return item;
+            }
+            return null;
         }
 
         private void AddTmpMapPoint(Geopoint position)
@@ -301,6 +324,8 @@ namespace MapApp.Views
             _mapClickWasElementClick = false;
         }
 
+        public event EventHandler<MapElementClickedEventArgs> MapElementClick;
+
         private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
         {
             if (TmpMapElements.Contains(args.MapElements.First()))
@@ -311,12 +336,14 @@ namespace MapApp.Views
             {
                 //flyoutGrid.ContextFlyout = editMapElementFlyout;
                 //flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
-                _editedMapElement = args.MapElements[0];
+                //_editedMapElement = args.MapElements[0];
 
-                if (_editedMapElement.GetType() == typeof(MapIcon))
-                {
-                    editMapElementFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
-                }
+                //if (_editedMapElement.GetType() == typeof(MapIcon))
+                //{
+                //    editMapElementFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
+                //}
+
+                MapElementClick?.Invoke(this, new MapElementClickedEventArgs(GetMapElementItemContaining(args.MapElements.First())));
             }
             _mapClickWasElementClick = true;
         }
@@ -331,6 +358,7 @@ namespace MapApp.Views
 
         private void EditMapElementDeleteFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
+            // TODO: delete from MapElements
             mapControl.MapElements.Remove(_editedMapElement);
             editMapElementFlyout.Hide();
         }
@@ -361,14 +389,14 @@ namespace MapApp.Views
 
         private void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path, e.BorderColor);
+            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path, e.BorderColor, e.Name);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
         private void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path, e.FillColor, e.BorderColor);
+            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path, e.FillColor, e.BorderColor, e.Name);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
@@ -379,5 +407,12 @@ namespace MapApp.Views
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
+    }
+
+    public class MapElementClickedEventArgs : EventArgs
+    {
+        public MapElementItem Element { get; }
+
+        public MapElementClickedEventArgs(MapElementItem element) => Element = element;
     }
 }

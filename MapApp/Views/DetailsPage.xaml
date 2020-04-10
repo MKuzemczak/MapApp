@@ -1,0 +1,122 @@
+﻿<Page
+    x:Class="MapApp.Views.DetailsPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MapApp.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:maps="using:Windows.UI.Xaml.Controls.Maps"
+    xmlns:templateSelectors="using:MapApp.TemplateSelectors"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:helpers="using:MapApp.Helpers"
+    xmlns:models="using:MapApp.Models"
+    mc:Ignorable="d"
+    Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+    <Page.Resources>
+        <DataTemplate x:Key="MapIconTemplate" x:DataType="models:MapIconItem" >
+            <StackPanel>
+                <TextBlock Text="{x:Bind Name}"
+                           Style="{StaticResource PageTitleStyle}"
+                           Margin="{StaticResource MediumTopLeftMargin}" />
+                <TextBlock Text="Icon"
+                               Style="{StaticResource DetailSubTitleStyle}"
+                               Margin="{StaticResource MediumLeftMargin}" />
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MapPolylineTemplate" x:DataType="models:MapPolylineItem" >
+            <StackPanel>
+                <TextBlock Text="{x:Bind Name}"
+                           Style="{StaticResource PageTitleStyle}"
+                           Margin="{StaticResource MediumTopLeftMargin}" />
+                <TextBlock Text="Polyline"
+                               Style="{StaticResource DetailSubTitleStyle}"
+                               Margin="{StaticResource MediumLeftMargin}" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="7"
+                            Margin="{StaticResource MediumLeftMargin}"
+                            ToolTipService.ToolTip="Length">
+                    <TextBlock Text="&#xECC6;"
+                                Padding="{StaticResource SmallLeftRightMargin}"
+                                FontFamily="Segoe MDL2 Assets"
+                               FontSize="20"
+                               Margin="0,13,0,0"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="{x:Bind Length.ToString()}"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="m"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Spacing="7"
+                            Margin="{StaticResource MediumLeftMargin}"
+                            ToolTipService.ToolTip="Layer name">
+                    <TextBlock Text="&#xE81E;"
+                                Padding="{StaticResource SmallLeftRightMargin}"
+                                FontFamily="Segoe MDL2 Assets"
+                               FontSize="20"
+                               Margin="0,13,0,0"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="{x:Bind ParentLayerName}"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <DataTemplate x:Key="MapPolygonTemplate" x:DataType="models:MapPolygonItem" >
+            <StackPanel>
+                <TextBlock Text="{x:Bind Name}"
+                           Style="{StaticResource PageTitleStyle}"
+                           Margin="{StaticResource MediumTopLeftMargin}" />
+                <TextBlock Text="Polygon"
+                               Style="{StaticResource DetailSubTitleStyle}"
+                               Margin="{StaticResource MediumLeftMargin}" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="7"
+                            Margin="{StaticResource MediumLeftMargin}"
+                            ToolTipService.ToolTip="Border length">
+                    <TextBlock Text="&#xECC6;"
+                                Padding="{StaticResource SmallLeftRightMargin}"
+                                FontFamily="Segoe MDL2 Assets"
+                               FontSize="20"
+                               Margin="0,13,0,0"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="{x:Bind BorderLength.ToString()}"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="m"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                </StackPanel>
+                <StackPanel Orientation="Horizontal"
+                            Spacing="7"
+                            Margin="{StaticResource MediumLeftMargin}"
+                            ToolTipService.ToolTip="Layer name">
+                    <TextBlock Text="&#xE81E;"
+                                Padding="{StaticResource SmallLeftRightMargin}"
+                                FontFamily="Segoe MDL2 Assets"
+                               FontSize="20"
+                               Margin="0,13,0,0"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="{x:Bind ParentLayerName}"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                </StackPanel>
+            </StackPanel>
+        </DataTemplate>
+
+        <templateSelectors:MapElementTemplateSelector x:Key="DetailsTemplateSelector"
+            MapIconTemplate="{StaticResource MapIconTemplate}"
+            MapPolylineTemplate="{StaticResource MapPolylineTemplate}"
+            MapPolygonTemplate="{StaticResource MapPolygonTemplate}"/>
+    </Page.Resources>
+    <Grid>
+        <ScrollViewer>
+            <ContentControl Content="{x:Bind SelectedItem, Mode=OneWay}"
+                            ContentTemplateSelector="{StaticResource DetailsTemplateSelector}"/>
+        </ScrollViewer>
+    </Grid>
+</Page>
