@@ -21,6 +21,20 @@
                 <TextBlock Text="Icon"
                                Style="{StaticResource DetailSubTitleStyle}"
                                Margin="{StaticResource MediumLeftMargin}" />
+                <StackPanel Orientation="Horizontal"
+                            Spacing="7"
+                            Margin="{StaticResource MediumLeftMargin}"
+                            ToolTipService.ToolTip="Layer name">
+                    <TextBlock Text="&#xE81E;"
+                                Padding="{StaticResource SmallLeftRightMargin}"
+                                FontFamily="Segoe MDL2 Assets"
+                               FontSize="20"
+                               Margin="0,13,0,0"
+                               Style="{StaticResource BodyTextStyle}" />
+                    <TextBlock Text="{x:Bind ParentLayer.Name}"
+                               Margin="{StaticResource SmallTopMargin}"
+                               Style="{StaticResource BodyTextStyle}" />
+                </StackPanel>
             </StackPanel>
         </DataTemplate>
 
@@ -59,7 +73,7 @@
                                FontSize="20"
                                Margin="0,13,0,0"
                                Style="{StaticResource BodyTextStyle}" />
-                    <TextBlock Text="{x:Bind ParentLayerName}"
+                    <TextBlock Text="{x:Bind ParentLayer.Name}"
                                Margin="{StaticResource SmallTopMargin}"
                                Style="{StaticResource BodyTextStyle}" />
                 </StackPanel>
@@ -101,7 +115,7 @@
                                FontSize="20"
                                Margin="0,13,0,0"
                                Style="{StaticResource BodyTextStyle}" />
-                    <TextBlock Text="{x:Bind ParentLayerName}"
+                    <TextBlock Text="{x:Bind ParentLayer.Name}"
                                Margin="{StaticResource SmallTopMargin}"
                                Style="{StaticResource BodyTextStyle}" />
                 </StackPanel>

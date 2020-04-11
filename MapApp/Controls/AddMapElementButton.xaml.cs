@@ -15,6 +15,9 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using MapApp.Models;
+using System.Collections.ObjectModel;
+
 // The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
 
 namespace MapApp.Controls
@@ -58,6 +61,19 @@ namespace MapApp.Controls
                 return nameTextBox.Text;
             }
         }
+
+
+
+        public ObservableCollection<MapLayerItem> Layers
+        {
+            get { return (ObservableCollection<MapLayerItem>)GetValue(LayersProperty); }
+            set { SetValue(LayersProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for Layers.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty LayersProperty =
+            DependencyProperty.Register("Layers", typeof(ObservableCollection<MapLayerItem>), typeof(AddMapElementButton), new PropertyMetadata(0));
+
 
 
         public ImageSource ContentSource
@@ -105,34 +121,39 @@ namespace MapApp.Controls
 
 
 
+        public bool IsLayersComboBoxVisible
+        {
+            get { return (bool)GetValue(IsLayersComboBoxVisibleProperty); }
+            set { SetValue(IsLayersComboBoxVisibleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsLayersComboBoxVisible.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsLayersComboBoxVisibleProperty =
+            DependencyProperty.Register("IsLayersComboBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
+
+
+
+        public bool IsWidthNumberBoxVisible
+        {
+            get { return (bool)GetValue(IsWidthNumberBoxVisibleProperty); }
+            set { SetValue(IsWidthNumberBoxVisibleProperty, value); }
+        }
+
+        // Using a DependencyProperty as the backing store for IsWidthNumberBoxVisible.  This enables animation, styling, binding, etc...
+        public static readonly DependencyProperty IsWidthNumberBoxVisibleProperty =
+            DependencyProperty.Register("IsWidthNumberBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
+
+
+
         public AddMapElementButton()
         {
             IsNameTextBoxVisible = false;
             IsBorderColorPickVisible = false;
             IsFillColorPickVisible = false;
+            IsLayersComboBoxVisible = false;
+            IsWidthNumberBoxVisible = false;
             this.InitializeComponent();
             
-        }
-
-        public void Show()
-        {
-            CollapseAll();
-            if (IsNameTextBoxVisible)
-            {
-                nameTextBlock.Visibility = Visibility.Visible;
-                nameTextBox.Visibility = Visibility.Visible;
-            }
-            if (IsBorderColorPickVisible)
-            {
-                borderColorTextBlock.Visibility = Visibility.Visible;
-                borderColorPickButton.Visibility = Visibility.Visible;
-            }
-            if (IsFillColorPickVisible)
-            {
-                fillColorTextBlock.Visibility = Visibility.Visible;
-                fillColorPickButton.Visibility = Visibility.Visible;
-            }
-            ContextFlyout.ShowAt(this);
         }
 
         private void CollapseAll()
@@ -143,6 +164,10 @@ namespace MapApp.Controls
             borderColorPickButton.Visibility = Visibility.Collapsed;
             fillColorTextBlock.Visibility = Visibility.Collapsed;
             fillColorPickButton.Visibility = Visibility.Collapsed;
+            layerTextBlock.Visibility = Visibility.Collapsed;
+            layersCombo.Visibility = Visibility.Collapsed;
+            widthTextBlock.Visibility = Visibility.Collapsed;
+            widthNumberBox.Visibility = Visibility.Collapsed;
         }
 
         private void BorderColorPicker_ColorChanged(ColorPicker sender, ColorChangedEventArgs args)
@@ -164,7 +189,45 @@ namespace MapApp.Controls
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
-            AddClicked?.Invoke(this, new AddMapElementButtonFlyoutAddButtonClickedEventArgs(NameTextBoxContent, BorderColor, FillColor));
+            if (IsNameTextBoxVisible)
+            {
+                if (NameTextBoxContent == "")
+                {
+                    nameTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                    return;
+                }
+                else
+                {
+                    nameTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+                }
+            }
+            if (IsLayersComboBoxVisible)
+            {
+                if (layersCombo.SelectedItem is null)
+                {
+                    layersCombo.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                    return;
+                }
+                else
+                {
+                    layersCombo.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+                }
+            }
+            if (IsWidthNumberBoxVisible)
+            {
+                if (widthNumberBox.Text == "" || widthNumberBox.Value < 0.000000001)
+                {
+                    widthNumberBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+                    return;
+                }
+                else
+                {
+                    widthNumberBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+                }
+            }
+
+            AddClicked?.Invoke(this,
+                new AddMapElementButtonFlyoutAddButtonClickedEventArgs(NameTextBoxContent, BorderColor, FillColor, layersCombo.SelectedItem as MapLayerItem, widthNumberBox.Value));
             button.Flyout.Hide();
             nameTextBox.Text = "";
         }
@@ -187,6 +250,16 @@ namespace MapApp.Controls
                 fillColorTextBlock.Visibility = Visibility.Visible;
                 fillColorPickButton.Visibility = Visibility.Visible;
             }
+            if (IsLayersComboBoxVisible)
+            {
+                layerTextBlock.Visibility = Visibility.Visible;
+                layersCombo.Visibility = Visibility.Visible;
+            }
+            if (IsWidthNumberBoxVisible)
+            {
+                widthTextBlock.Visibility = Visibility.Visible;
+                widthNumberBox.Visibility = Visibility.Visible;
+            }
         }
     }
 
@@ -195,12 +268,16 @@ namespace MapApp.Controls
         public readonly string Name;
         public readonly Color BorderColor;
         public readonly Color FillColor;
+        public readonly MapLayerItem Layer;
+        public readonly double Width;
 
-        public AddMapElementButtonFlyoutAddButtonClickedEventArgs(string name, Color border, Color fill)
+        public AddMapElementButtonFlyoutAddButtonClickedEventArgs(string name, Color border, Color fill, MapLayerItem layer, double width)
         {
             Name = name;
             BorderColor = border;
             FillColor = fill;
+            Layer = layer;
+            Width = width;
         }
     }
 }

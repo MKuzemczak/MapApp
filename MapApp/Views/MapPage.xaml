@@ -74,11 +74,41 @@
                 Orientation="Horizontal"
                 HorizontalAlignment="Center"
                 VerticalAlignment="Center">
+                <Button
+                    x:Name="addLayerButton"
+                    HorizontalAlignment="Center"
+                    Style="{StaticResource MapButtonStyle}"
+                    Margin="0,0,10,0">
+                    <Button.Flyout>
+                        <Flyout>
+                            <StackPanel Spacing="10">
+                                <TextBlock Text="Add layer" />
+                                <StackPanel Orientation="Horizontal"
+                                            Spacing="5" >
+                                    <TextBlock Text="Name"
+                                               Margin="0,5,0,0" />
+                                    <TextBox x:Name="addLayerTextBox"
+                                             Width="200"/>
+                                </StackPanel>
+                                <Button x:Name="addLayerFlyoutAddButton"
+                                        Content="Add"
+                                        Click="AddLayerFlyoutAddButton_Click" />
+                            </StackPanel>
+                        </Flyout>
+                    </Button.Flyout>
+                    <Image
+                        Source="ms-appx:///Assets/Map-Add-Layer-icon.png"
+                        ImageFailed="Image_ImageFailed" />
+                </Button>
+                
                 <controls:AddMapElementButton x:Name="addPolylineButton"
                                               ContentSource="ms-appx:///Assets/Maps-Polyline-icon.png"
                                               Visibility="Collapsed"
                                               IsNameTextBoxVisible="True"
                                               IsBorderColorPickVisible="True"
+                                              IsLayersComboBoxVisible="True"
+                                              IsWidthNumberBoxVisible="True"
+                                              Layers="{x:Bind MapLayers}"
                                               AddClicked="AddPolylineButton_AddClicked"/>
                 <controls:AddMapElementButton x:Name="addPolygonButton"
                                               ContentSource="ms-appx:///Assets/Maps-Polygon-icon.png"
@@ -86,12 +116,17 @@
                                               IsNameTextBoxVisible="True"
                                               IsBorderColorPickVisible="True"
                                               IsFillColorPickVisible="True"
+                                              IsLayersComboBoxVisible="True"
+                                              Layers="{x:Bind MapLayers}"
                                               AddClicked="AddPolygonButton_AddClicked"/>
                 <controls:AddMapElementButton x:Name="addPinButton"
                                               ContentSource="ms-appx:///Assets/Map-Add-Pin-icon.png"
                                               Visibility="Collapsed"
                                               IsNameTextBoxVisible="True"
+                                              IsLayersComboBoxVisible="True"
+                                              Layers="{x:Bind MapLayers}"
                                               AddClicked="AddPinButton_AddClicked"/>
+                
                 <Button
                     x:Name="cancelButton"
                     HorizontalAlignment="Center"

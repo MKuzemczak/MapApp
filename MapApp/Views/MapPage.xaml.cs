@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -16,6 +17,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Maps;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace MapApp.Views
@@ -50,6 +52,7 @@ namespace MapApp.Views
             set { Set(ref _center, value); }
         }
 
+        private ObservableCollection<MapLayerItem> MapLayers = new ObservableCollection<MapLayerItem>();
         private List<MapElementItem> MapElements = new List<MapElementItem>();
         private List<MapElement> TmpMapElements = new List<MapElement>();
         private MapElement _editedMapElement = null;
@@ -101,7 +104,7 @@ namespace MapApp.Views
             {
                 // TODO WTS: Set your map service token. If you don't have one, request from https://www.bingmapsportal.com/
                 // mapControl.MapServiceToken = string.Empty;
-                AddMapIcon(Center, "Map_YourLocation".GetLocalized());
+                // AddMapIcon(Center, "Map_YourLocation".GetLocalized());
             }
         }
 
@@ -122,51 +125,27 @@ namespace MapApp.Views
             }
         }
 
-        private void AddMapIcon(Geopoint position, string title)
+        private void AddMapLayer(string name)
         {
-            MapIcon mapIcon = new MapIcon()
-            {
-                Location = position,
-                NormalizedAnchorPoint = new Point(0.5, 1.0),
-                Title = title,
-                Image = RandomAccessStreamReference.CreateFromUri(new Uri("ms-appx:///Assets/map.png")),
-                ZIndex = 0
-            };
-            mapControl.MapElements.Add(mapIcon);
-            MapIconItem iconItem = new MapIconItem()
-            {
-                Element = mapIcon,
-                ParentLayerName = "Warstwa 0"
-            };
-
-            MapElements.Add(iconItem);
+            MapLayers.Add(new MapLayerItem() { Id = MapLayers.Count, Name = name });
         }
 
-        private void AddMapPolyline(Geopath path, Color strokeColor, string name)
+        private void AddMapIcon(BasicGeoposition position, string title, MapLayerItem layer)
         {
-            MapPolyline polyline = new MapPolyline()
-            {
-                Path = path,
-                ZIndex = 0,
-                StrokeColor = strokeColor
-            };
-            MapPolylineItem item = MapPolylineItem.FromMapPolyline(polyline, name: name, parentLayerName: "Warstwa 0");
-            MapElements.Add(item);
-            mapControl.MapElements.Add(item.Element);
+            MapElements.Add(MapElementItemFactoryService.GetMapIconItem(title, position, layer));
+            mapControl.MapElements.Add(MapElements.Last().Element);
         }
 
-        private void AddMapPolygon(Geopath path, Color fillColor, Color strokeColor, string name)
+        private void AddMapPolyline(IReadOnlyList<BasicGeoposition> path, Color strokeColor, string name, MapLayerItem layer, double width)
         {
-            MapPolygon polygon = new MapPolygon()
-            {
-                FillColor = fillColor,
-                StrokeColor = strokeColor,
-                ZIndex = 0
-            };
-            polygon.Paths.Add(path);
-            mapControl.MapElements.Add(polygon);
+            MapElements.Add(MapElementItemFactoryService.GetMapPolylineItem(name, path, layer, strokeColor, width));
+            mapControl.MapElements.Add(MapElements.Last().Element);
+        }
 
-            MapElements.Add(MapPolygonItem.FromPolygonItem(polygon, name, "Warstwa 0"));
+        private void AddMapPolygon(IReadOnlyList<BasicGeoposition> path, Color fillColor, Color strokeColor, string name, MapLayerItem layer)
+        {
+            MapElements.Add(MapElementItemFactoryService.GetMapPolygonItem(name, path, layer, strokeColor, fillColor));
+            mapControl.MapElements.Add(MapElements.Last().Element);
         }
 
         public MapElementItem GetMapElementItemContaining(MapElement element)
@@ -389,23 +368,38 @@ namespace MapApp.Views
 
         private void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path, e.BorderColor, e.Name);
+            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path.Positions, e.BorderColor, e.Name, e.Layer, e.Width);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
         private void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path, e.FillColor, e.BorderColor, e.Name);
+            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path.Positions, e.FillColor, e.BorderColor, e.Name, e.Layer);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
         private void AddPinButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapIcon((TmpMapElements.Last() as MapIcon).Location, e.Name);
+            AddMapIcon((TmpMapElements.Last() as MapIcon).Location.Position, e.Name, e.Layer);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
+        }
+
+        private void AddLayerFlyoutAddButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (addLayerTextBox.Text.Any())
+            {
+                AddMapLayer(addLayerTextBox.Text);
+                addLayerButton.Flyout.Hide();
+                addLayerTextBox.Text = "";
+                addLayerTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));
+            }
+            else
+            {
+                addLayerTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 255, 0, 0));
+            }
         }
     }
 

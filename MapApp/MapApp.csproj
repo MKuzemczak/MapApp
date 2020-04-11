@@ -147,6 +147,7 @@
     <Compile Include="Models\DragDropCompletedData.cs" />
     <Compile Include="Models\DragDropData.cs" />
     <Compile Include="Models\DragDropStartingData.cs" />
+    <Compile Include="Models\MapLayerItem.cs" />
     <Compile Include="Models\MapElementItem.cs" />
     <Compile Include="Models\MapIconItem.cs" />
     <Compile Include="Models\MapPolygonItem.cs" />
@@ -158,6 +159,7 @@
     <Compile Include="Services\DragAndDrop\ListViewDropConfiguration.cs" />
     <Compile Include="Services\DragAndDrop\VisualDropConfiguration.cs" />
     <Compile Include="Services\LocationService.cs" />
+    <Compile Include="Services\MapElementItemFactoryService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
     <Compile Include="TemplateSelectors\MapElementTemplateSelector.cs" />
@@ -243,6 +245,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Cancel-icon.png" />
+    <Content Include="Assets\Map-Add-Layer-icon.png" />
     <Content Include="Assets\Map-Add-Pin-icon.png" />
     <Content Include="Assets\map.png" />
     <Content Include="Assets\Maps-Polygon-icon.png" />

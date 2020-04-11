@@ -5,6 +5,7 @@
     xmlns:local="using:MapApp.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
     mc:Ignorable="d">
 
     <Button x:Name="button" Style="{StaticResource MapButtonStyle}" >
@@ -17,13 +18,15 @@
                     <TextBlock
                         x:Name="titleTextBox"
                         Height="30"
-                        Text="Add a pin" />
+                        Text="Add map element" />
                     <Grid RowSpacing="10" >
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition Width="*" />
                             <ColumnDefinition Width="2*" />
                         </Grid.ColumnDefinitions>
                         <Grid.RowDefinitions>
+                            <RowDefinition Height="*" />
+                            <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
                             <RowDefinition Height="*" />
@@ -95,6 +98,31 @@
                                 </Flyout>
                             </Button.Flyout>
                         </Button>
+                        <TextBlock x:Name="layerTextBlock"
+                               Text="Layer"
+                               Grid.Column="0"
+                               Grid.Row="3"
+                                HorizontalAlignment="Right"
+                               VerticalAlignment="Center" 
+                                Margin="0,0,5,0"/>
+                        <ComboBox x:Name="layersCombo"
+                                  Width="200"
+                                  ItemsSource="{x:Bind Layers}"
+                                  DisplayMemberPath="Name"
+                                  Grid.Column="1"
+                                  Grid.Row="3"/>
+                        <TextBlock x:Name="widthTextBlock"
+                               Text="Width"
+                               Grid.Column="0"
+                               Grid.Row="4"
+                                HorizontalAlignment="Right"
+                               VerticalAlignment="Center" 
+                                Margin="0,0,5,0"/>
+                        <controls:NumberBox x:Name="widthNumberBox"
+                                            Width="100"
+                                            Value="0.00001"
+                                            Grid.Column="1"
+                                            Grid.Row="4"/>
                     </Grid>
                     <Button x:Name="addButton"
                             Grid.Column="1"

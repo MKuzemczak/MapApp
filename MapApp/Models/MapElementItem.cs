@@ -14,12 +14,7 @@ namespace MapApp.Models
     {
         public MapElement Element { get; set; }
 
-        public string ParentLayerName { get; set; }
-
-        public int ParentLayerId
-        {
-            get { return Element.ZIndex; }
-        }
+        public MapLayerItem ParentLayer { get; set; }
 
         private string _name;
 
