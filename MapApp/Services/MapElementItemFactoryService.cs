@@ -17,7 +17,7 @@ namespace MapApp.Services
 {
     public static class MapElementItemFactoryService
     {
-        public static MapIconItem GetMapIconItem(string name, BasicGeoposition position, MapLayerItem layer)
+        public static MapIconItem GetMapIconItem(string name, BasicGeoposition position, MapLayerItem layer, int id = -1)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -39,11 +39,65 @@ namespace MapApp.Services
                     Title = name,
                     ZIndex = layer.Id
                 },
-                ParentLayer = layer
+                Name = name,
+                ParentLayer = layer,
+                Id = id
             };
         }
 
-        public static MapPolylineItem GetMapPolylineItem(string name, IReadOnlyList<BasicGeoposition> path, MapLayerItem layer, Color strokeColor, double width)
+        public static MapPolylineItem GetMapPolylineItem(int id,
+                                                         string name,
+                                                         double width,
+                                                         double length,
+                                                         IReadOnlyList<BasicGeoposition> polygonRepresentationPath,
+                                                         IReadOnlyList<BasicGeoposition> path,
+                                                         MapLayerItem layer,
+                                                         Color strokeColor)
+        {
+            if (string.IsNullOrEmpty(name))
+            {
+                throw new ArgumentException("Name cannot be empty", nameof(name));
+            }
+
+            if (polygonRepresentationPath is null)
+            {
+                throw new ArgumentNullException(nameof(polygonRepresentationPath));
+            }
+
+            if (path is null)
+            {
+                throw new ArgumentNullException(nameof(path));
+            }
+
+            if (layer is null)
+            {
+                throw new ArgumentNullException(nameof(layer));
+            }
+
+            MapPolylineItem result = new MapPolylineItem()
+            {
+                Id = id,
+                ParentLayer = layer,
+                Name = name,
+                Length = length,
+                Width = width,
+                Path = path
+            };
+
+            MapPolygon element = new MapPolygon()
+            {
+                FillColor = strokeColor,
+                StrokeColor = strokeColor,
+                ZIndex = layer.Id
+            };
+            element.Paths.Add(new Geopath(polygonRepresentationPath));
+            result.Element = element;
+            return result;
+        }
+
+        public static MapPolylineItem GetMapPolylineItem(string name, IReadOnlyList<BasicGeoposition> path,
+                                                         MapLayerItem layer, Color strokeColor, double width,
+                                                         int id = -1)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -59,13 +113,6 @@ namespace MapApp.Services
             {
                 throw new ArgumentNullException(nameof(layer));
             }
-
-            MapPolylineItem result = new MapPolylineItem()
-            {
-                ParentLayer = layer,
-                Name = name,
-                Length = GeoMath.PolylineLength(path)
-            };
 
             List<BasicGeoposition> left = new List<BasicGeoposition>();
             List<BasicGeoposition> right = new List<BasicGeoposition>();
@@ -85,19 +132,17 @@ namespace MapApp.Services
             }
 
             left.InsertRange(left.Count, right);
-            MapPolygon element = new MapPolygon()
-            {
-                FillColor = strokeColor,
-                StrokeColor = strokeColor,
-                ZIndex = layer.Id
-            };
-            element.Paths.Add(new Geopath(left));
-            result.Element = element;
-
-            return result;
+            return GetMapPolylineItem(id,
+                                      name,
+                                      width,
+                                      GeoMath.PolylineLength(path),
+                                      left,
+                                      path,
+                                      layer,
+                                      strokeColor);
         }
 
-        public static MapPolygonItem GetMapPolygonItem(string name, IReadOnlyList<BasicGeoposition> path, MapLayerItem layer, Color strokeColor, Color fillColor)
+        public static MapPolygonItem GetMapPolygonItem(string name, IReadOnlyList<BasicGeoposition> path, MapLayerItem layer, Color strokeColor, Color fillColor, int id = -1)
         {
             if (string.IsNullOrEmpty(name))
             {
@@ -124,6 +169,7 @@ namespace MapApp.Services
 
             return new MapPolygonItem()
             {
+                Id = id,
                 Name = name,
                 ParentLayer = layer,
                 Element = polygon,

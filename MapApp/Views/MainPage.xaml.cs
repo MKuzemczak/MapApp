@@ -13,6 +13,8 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using MapApp.DatabaseAccess;
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace MapApp.Views
@@ -27,10 +29,22 @@ namespace MapApp.Views
             this.InitializeComponent();
         }
 
+        protected override async void OnNavigatedTo(NavigationEventArgs e)
+        {
+            await DatabaseAccessService.CreateDatabaseAsync();
+            await mapPage.InitializeAsync();
+        }
+
         private void MapPage_MapElementClick(object sender, MapElementClickedEventArgs e)
         {
             splitView.IsPaneOpen = true;
             detailsPage.SelectItem(e.Element);
+        }
+
+        private async void DetailsPage_DeleteButtonClick(object sender, EventArgs e)
+        {
+            await mapPage.DeleteSelectedMapElementItem();
+            splitView.IsPaneOpen = false;
         }
     }
 }

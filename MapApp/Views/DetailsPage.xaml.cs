@@ -57,5 +57,12 @@ namespace MapApp.Views
         }
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
+        public event EventHandler DeleteButtonClick;
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            DeleteButtonClick?.Invoke(this, new EventArgs());
+        }
     }
 }

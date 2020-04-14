@@ -14,10 +14,31 @@
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
         <DataTemplate x:Key="MapIconTemplate" x:DataType="models:MapIconItem" >
-            <StackPanel>
-                <TextBlock Text="{x:Bind Name}"
-                           Style="{StaticResource PageTitleStyle}"
-                           Margin="{StaticResource MediumTopLeftMargin}" />
+            <StackPanel HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Name}"
+                               Grid.Column="0"
+                               Style="{StaticResource PageTitleStyle}"
+                               Margin="{StaticResource MediumTopLeftMargin}" />
+                    <Button Grid.Column="1"
+                            Content="&#xE74D;"
+                            FontSize="20"
+                            Height="40"
+                            Width="40"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="{StaticResource MediumTopRightMargin}"
+                            FontFamily="Segoe MDL2 Assets"
+                            Background="Transparent"
+                            CornerRadius="0"
+                            ToolTipService.ToolTip="Remove map element"
+                            Click="DeleteButton_Click"/>
+                </Grid>
                 <TextBlock Text="Icon"
                                Style="{StaticResource DetailSubTitleStyle}"
                                Margin="{StaticResource MediumLeftMargin}" />
@@ -39,10 +60,31 @@
         </DataTemplate>
 
         <DataTemplate x:Key="MapPolylineTemplate" x:DataType="models:MapPolylineItem" >
-            <StackPanel>
-                <TextBlock Text="{x:Bind Name}"
-                           Style="{StaticResource PageTitleStyle}"
-                           Margin="{StaticResource MediumTopLeftMargin}" />
+            <StackPanel HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Name}"
+                               Grid.Column="0"
+                               Style="{StaticResource PageTitleStyle}"
+                               Margin="{StaticResource MediumTopLeftMargin}" />
+                    <Button Grid.Column="1"
+                            Content="&#xE74D;"
+                            FontSize="20"
+                            Height="40"
+                            Width="40"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="{StaticResource MediumTopRightMargin}"
+                            FontFamily="Segoe MDL2 Assets"
+                            Background="Transparent"
+                            CornerRadius="0"
+                            ToolTipService.ToolTip="Remove map element"
+                            Click="DeleteButton_Click"/>
+                </Grid>
                 <TextBlock Text="Polyline"
                                Style="{StaticResource DetailSubTitleStyle}"
                                Margin="{StaticResource MediumLeftMargin}" />
@@ -81,10 +123,31 @@
         </DataTemplate>
 
         <DataTemplate x:Key="MapPolygonTemplate" x:DataType="models:MapPolygonItem" >
-            <StackPanel>
-                <TextBlock Text="{x:Bind Name}"
-                           Style="{StaticResource PageTitleStyle}"
-                           Margin="{StaticResource MediumTopLeftMargin}" />
+            <StackPanel HorizontalAlignment="Stretch">
+                <Grid HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock Text="{x:Bind Name}"
+                               Grid.Column="0"
+                               Style="{StaticResource PageTitleStyle}"
+                               Margin="{StaticResource MediumTopLeftMargin}" />
+                    <Button Grid.Column="1"
+                            Content="&#xE74D;"
+                            FontSize="20"
+                            Height="40"
+                            Width="40"
+                            VerticalAlignment="Stretch"
+                            VerticalContentAlignment="Center"
+                            HorizontalAlignment="Right"
+                            Margin="{StaticResource MediumTopRightMargin}"
+                            FontFamily="Segoe MDL2 Assets"
+                            Background="Transparent"
+                            CornerRadius="0"
+                            ToolTipService.ToolTip="Remove map element"
+                            Click="DeleteButton_Click"/>
+                </Grid>
                 <TextBlock Text="Polygon"
                                Style="{StaticResource DetailSubTitleStyle}"
                                Margin="{StaticResource MediumLeftMargin}" />
@@ -128,9 +191,11 @@
             MapPolygonTemplate="{StaticResource MapPolygonTemplate}"/>
     </Page.Resources>
     <Grid>
-        <ScrollViewer>
+        <ScrollViewer HorizontalAlignment="Stretch">
             <ContentControl Content="{x:Bind SelectedItem, Mode=OneWay}"
-                            ContentTemplateSelector="{StaticResource DetailsTemplateSelector}"/>
+                            ContentTemplateSelector="{StaticResource DetailsTemplateSelector}"
+                            HorizontalAlignment="Stretch"
+                            HorizontalContentAlignment="Stretch"/>
         </ScrollViewer>
     </Grid>
 </Page>

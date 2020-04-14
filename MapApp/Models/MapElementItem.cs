@@ -12,6 +12,8 @@ namespace MapApp.Models
 {
     public class MapElementItem
     {
+        public int Id { get; set; }
+
         public MapElement Element { get; set; }
 
         public MapLayerItem ParentLayer { get; set; }

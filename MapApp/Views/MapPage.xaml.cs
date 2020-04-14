@@ -6,6 +6,7 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 
+using MapApp.DatabaseAccess;
 using MapApp.Helpers;
 using MapApp.Models;
 using MapApp.Services;
@@ -55,7 +56,7 @@ namespace MapApp.Views
         private ObservableCollection<MapLayerItem> MapLayers = new ObservableCollection<MapLayerItem>();
         private List<MapElementItem> MapElements = new List<MapElementItem>();
         private List<MapElement> TmpMapElements = new List<MapElement>();
-        private MapElement _editedMapElement = null;
+        public MapElementItem SelectedElement { get; set; }
         private bool _mapClickWasElementClick = false;
 
         public MapPage()
@@ -79,6 +80,13 @@ namespace MapApp.Views
 
         public async Task InitializeAsync()
         {
+            MapLayers = new ObservableCollection<MapLayerItem>(await DatabaseAccessService.GetLayers());
+            var elements = await DatabaseAccessService.GetMapElementItemsAsync();
+            foreach (var item in elements)
+            {
+                AddMapElementItem(item);
+            }
+
             if (_locationService != null)
             {
                 _locationService.PositionChanged += LocationService_PositionChanged;
@@ -125,27 +133,50 @@ namespace MapApp.Views
             }
         }
 
-        private void AddMapLayer(string name)
+        private async Task AddMapLayer(string name)
         {
-            MapLayers.Add(new MapLayerItem() { Id = MapLayers.Count, Name = name });
+            int newId = (MapLayers.Count == 0) ? 0 : MapLayers.Last().Id + 1;
+            MapLayers.Add(new MapLayerItem() { Id = newId, Name = name });
+            await DatabaseAccessService.InsertLayer(MapLayers.Last());
         }
 
-        private void AddMapIcon(BasicGeoposition position, string title, MapLayerItem layer)
+        private void AddMapElementItem(MapElementItem item)
         {
-            MapElements.Add(MapElementItemFactoryService.GetMapIconItem(title, position, layer));
-            mapControl.MapElements.Add(MapElements.Last().Element);
+            MapElements.Add(item);
+            mapControl.MapElements.Add(item.Element);
         }
 
-        private void AddMapPolyline(IReadOnlyList<BasicGeoposition> path, Color strokeColor, string name, MapLayerItem layer, double width)
+        private async Task CreateAndAddMapIconAsync(BasicGeoposition position, string title, MapLayerItem layer)
         {
-            MapElements.Add(MapElementItemFactoryService.GetMapPolylineItem(name, path, layer, strokeColor, width));
-            mapControl.MapElements.Add(MapElements.Last().Element);
+            var newItem = MapElementItemFactoryService.GetMapIconItem(title, position, layer);
+            AddMapElementItem(newItem);
+            await DatabaseAccessService.InsertMapIconItem(newItem);
         }
 
-        private void AddMapPolygon(IReadOnlyList<BasicGeoposition> path, Color fillColor, Color strokeColor, string name, MapLayerItem layer)
+        private async Task CreateAndAddMapPolylineAsync(IReadOnlyList<BasicGeoposition> path, Color strokeColor, string name, MapLayerItem layer, double width)
         {
-            MapElements.Add(MapElementItemFactoryService.GetMapPolygonItem(name, path, layer, strokeColor, fillColor));
-            mapControl.MapElements.Add(MapElements.Last().Element);
+            var newItem = MapElementItemFactoryService.GetMapPolylineItem(name, path, layer, strokeColor, width);
+            AddMapElementItem(newItem);
+            await DatabaseAccessService.InsertMapPolylineItem(newItem);
+        }
+
+        private async Task CreateAndAddMapPolygonAsync(IReadOnlyList<BasicGeoposition> path, Color fillColor, Color strokeColor, string name, MapLayerItem layer)
+        {
+            var newItem = MapElementItemFactoryService.GetMapPolygonItem(name, path, layer, strokeColor, fillColor);
+            AddMapElementItem(newItem);
+            await DatabaseAccessService.InsertMapPolygonItem(newItem);
+        }
+
+        private async Task DeleteMapElementItem(MapElementItem item)
+        {
+            mapControl.MapElements.Remove(item.Element);
+            MapElements.Remove(item);
+            await DatabaseAccessService.DeleteMapElement(item.Id);
+        }
+
+        public async Task DeleteSelectedMapElementItem()
+        {
+            await DeleteMapElementItem(SelectedElement);
         }
 
         public MapElementItem GetMapElementItemContaining(MapElement element)
@@ -313,47 +344,40 @@ namespace MapApp.Views
             }
             else
             {
-                //flyoutGrid.ContextFlyout = editMapElementFlyout;
-                //flyoutGrid.ContextFlyout.ShowAt(flyoutGrid);
-                //_editedMapElement = args.MapElements[0];
+                SelectedElement = GetMapElementItemContaining(args.MapElements.First());
 
-                //if (_editedMapElement.GetType() == typeof(MapIcon))
-                //{
-                //    editMapElementFlyoutTextBox.Text = (_editedMapElement as MapIcon).Title;
-                //}
-
-                MapElementClick?.Invoke(this, new MapElementClickedEventArgs(GetMapElementItemContaining(args.MapElements.First())));
+                MapElementClick?.Invoke(this, new MapElementClickedEventArgs(SelectedElement));
             }
             _mapClickWasElementClick = true;
         }
 
-        private void EditMapElementSaveFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            if (_editedMapElement.GetType() == typeof(MapIcon))
-            {
-                (_editedMapElement as MapIcon).Title = editMapElementFlyoutTextBox.Text;
-            }
-        }
+        //private void EditMapElementSaveFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    //if (_editedMapElement.GetType() == typeof(MapIcon))
+        //    //{
+        //    //    (_editedMapElement as MapIcon).Title = editMapElementFlyoutTextBox.Text;
+        //    //}
+        //}
 
-        private void EditMapElementDeleteFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        {
-            // TODO: delete from MapElements
-            mapControl.MapElements.Remove(_editedMapElement);
-            editMapElementFlyout.Hide();
-        }
+        //private void EditMapElementDeleteFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        //{
+        //    // TODO: delete from MapElements
+        //    mapControl.MapElements.Remove(_editedMapElement);
+        //    editMapElementFlyout.Hide();
+        //}
 
-        private void EditMapElementFlyout_Closed(object sender, object e)
-        {
-            editMapElementFlyoutTextBox.Text = "";
-        }
+        //private void EditMapElementFlyout_Closed(object sender, object e)
+        //{
+        //    editMapElementFlyoutTextBox.Text = "";
+        //}
 
-        private void EditMapElementFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        {
-            if (e.Key == Windows.System.VirtualKey.Enter)
-            {
-                EditMapElementSaveFlyoutButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
-            }
-        }
+        //private void EditMapElementFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
+        //{
+        //    if (e.Key == Windows.System.VirtualKey.Enter)
+        //    {
+        //        EditMapElementSaveFlyoutButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
+        //    }
+        //}
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
@@ -366,32 +390,32 @@ namespace MapApp.Views
             UpdateAddButtonsVisibility();
         }
 
-        private void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolyline((TmpMapElements.First() as MapPolyline).Path.Positions, e.BorderColor, e.Name, e.Layer, e.Width);
+            await CreateAndAddMapPolylineAsync((TmpMapElements.First() as MapPolyline).Path.Positions, e.BorderColor, e.Name, e.Layer, e.Width);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
-        private void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapPolygon((TmpMapElements.First() as MapPolyline).Path.Positions, e.FillColor, e.BorderColor, e.Name, e.Layer);
+            await CreateAndAddMapPolygonAsync((TmpMapElements.First() as MapPolyline).Path.Positions, e.FillColor, e.BorderColor, e.Name, e.Layer);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
-        private void AddPinButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPinButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
         {
-            AddMapIcon((TmpMapElements.Last() as MapIcon).Location.Position, e.Name, e.Layer);
+            await CreateAndAddMapIconAsync((TmpMapElements.Last() as MapIcon).Location.Position, e.Name, e.Layer);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
-        private void AddLayerFlyoutAddButton_Click(object sender, RoutedEventArgs e)
+        private async void AddLayerFlyoutAddButton_Click(object sender, RoutedEventArgs e)
         {
             if (addLayerTextBox.Text.Any())
             {
-                AddMapLayer(addLayerTextBox.Text);
+                await AddMapLayer(addLayerTextBox.Text);
                 addLayerButton.Flyout.Hide();
                 addLayerTextBox.Text = "";
                 addLayerTextBox.BorderBrush = new SolidColorBrush(Color.FromArgb(255, 150, 150, 150));

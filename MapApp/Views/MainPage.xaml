@@ -16,7 +16,8 @@
                    OpenPaneLength="500"
                    PanePlacement="Left">
             <SplitView.Pane>
-                <views:DetailsPage x:Name="detailsPage" />
+                <views:DetailsPage x:Name="detailsPage"
+                                   DeleteButtonClick="DetailsPage_DeleteButtonClick"/>
             </SplitView.Pane>
             <Grid>
                 <views:MapPage x:Name="mapPage"

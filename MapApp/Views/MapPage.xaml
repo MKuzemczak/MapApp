@@ -22,7 +22,7 @@
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
             
-            <Flyout
+            <!--<Flyout
                 x:Name="editMapElementFlyout"
                 x:Key="EditMapElementFlyout"
                 Placement="Bottom"
@@ -50,7 +50,7 @@
                                 Click="EditMapElementDeleteFlyoutButton_Click" />
                     </Grid>
                 </StackPanel>
-            </Flyout>
+            </Flyout>-->
 
         </ResourceDictionary>
     </Page.Resources>

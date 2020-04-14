@@ -8,6 +8,8 @@ using Windows.Devices.Geolocation;
 using Windows.UI.Xaml.Controls.Maps;
 
 using MapApp.Helpers;
+using Windows.UI;
+using System.Collections.ObjectModel;
 
 namespace MapApp.Models
 {
@@ -15,48 +17,13 @@ namespace MapApp.Models
     {
         public double Length { get; set; }
 
-        //public static MapPolylineItem FromMapPolyline(MapPolyline polyline, double width = 0.000001, string name = "", string parentLayerName = "")
-        //{
-        //    MapPolylineItem result = new MapPolylineItem()
-        //    {
-        //        ParentLayerName = parentLayerName,
-        //        Name = name,
-        //        Length = GeoMath.PolylineLength(polyline.Path.Positions)
-        //    };
+        public double Width { get; set; }
 
-        //    List<BasicGeoposition> left = new List<BasicGeoposition>();
-        //    List<BasicGeoposition> right = new List<BasicGeoposition>();
+        public Color StrokeColor { get { return (Color)((Element as MapPolygon)?.StrokeColor); } }
 
-        //    var list = polyline.Path.Positions;
+        public IReadOnlyList<BasicGeoposition> PolygonRepresentationPath { get { return (Element as MapPolygon)?.Paths.First().Positions; } }
 
-        //    for (int i = 0; i < list.Count - 1; i++)
-        //    {
-        //        BasicGeoposition z = new BasicGeoposition() { Altitude = 1 };
-        //        BasicGeoposition vec = GeoMath.Difference(list[i + 1], list[i]);
-        //        BasicGeoposition prod = GeoMath.CrossProduct(vec, z);
-        //        BasicGeoposition norm = GeoMath.Normalize(prod);
-        //        BasicGeoposition tim = GeoMath.TimesScalar(norm, width);
-        //        right.Add(GeoMath.Sum(list[i], tim));
-        //        right.Add(GeoMath.Sum(list[i + 1], tim));
-        //        BasicGeoposition neg = GeoMath.TimesScalar(tim, -1);
-        //        left.Insert(0, GeoMath.Sum(list[i], neg));
-        //        left.Insert(0, GeoMath.Sum(list[i + 1], neg));
-        //    }
-
-        //    left.InsertRange(left.Count, right);
-        //    MapPolygon element = new MapPolygon()
-        //    {
-        //        FillColor = polyline.StrokeColor,
-        //        StrokeColor = polyline.StrokeColor,
-        //        ZIndex = polyline.ZIndex,
-        //        Tag = polyline.Tag
-        //    };
-        //    element.Paths.Add(new Geopath(left));
-        //    result.Element = element;
-
-        //    return result;
-        //}
-
+        public IReadOnlyList<BasicGeoposition> Path { get; set; }
     }
 
 
