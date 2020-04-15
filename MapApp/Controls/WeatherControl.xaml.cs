@@ -17,20 +17,25 @@ using MapApp.Models;
 using MapApp.Services;
 using Windows.UI.Xaml.Media.Imaging;
 
-// The User Control item template is documented at https://go.microsoft.com/fwlink/?LinkId=234236
-
 namespace MapApp.Controls
 {
+    /// <summary>
+    /// A custom control that displays weather info from a supplied WeatherItem object.
+    /// </summary>
     public sealed partial class WeatherControl : UserControl
     {
         private WeatherItem _weather;
 
+        /// <value> Gets or sets the <code>WeatherItem</code> object that contains info about the weather. </value>
         public WeatherItem Weather
         {
             get { return _weather; }
             set { SetWeatherItem(value); }
         }
 
+        /// <summary>
+        /// Initializes a new instance of the WeatherControl class.
+        /// </summary>
         public WeatherControl()
         {
             this.InitializeComponent();
@@ -53,9 +58,10 @@ namespace MapApp.Controls
             var iconFilePath = Path.Combine(path, iconFilename);
             SvgImageSource source = new SvgImageSource(new Uri(iconFilePath));
             weatherIconImage.Source = source;
-            tempTextBlock.Text = _weather.Temp + " \u00B0C";
+            var tempList = _weather.Temp.Split('.');
+            tempTextBlock.Text = tempList[0] + " \u00B0C";
             pressureTextBlock.Text = _weather.Pressure + " hPa";
-            windSpeedTextBlock.Text = _weather.Wind_speed + " m/s";
+            windSpeedTextBlock.Text = "Wind speed: " + _weather.Wind_speed + " m/s";
         }
     }
 }

@@ -80,7 +80,7 @@ namespace MapApp.Views
 
         public async Task InitializeAsync()
         {
-            MapLayers = new ObservableCollection<MapLayerItem>(await DatabaseAccessService.GetLayers());
+            MapLayers = new ObservableCollection<MapLayerItem>(await DatabaseAccessService.GetLayersAsync());
             var elements = await DatabaseAccessService.GetMapElementItemsAsync();
             foreach (var item in elements)
             {
@@ -137,7 +137,7 @@ namespace MapApp.Views
         {
             int newId = (MapLayers.Count == 0) ? 0 : MapLayers.Last().Id + 1;
             MapLayers.Add(new MapLayerItem() { Id = newId, Name = name });
-            await DatabaseAccessService.InsertLayer(MapLayers.Last());
+            await DatabaseAccessService.InsertLayerAsync(MapLayers.Last());
         }
 
         private void AddMapElementItem(MapElementItem item)
@@ -151,28 +151,28 @@ namespace MapApp.Views
             var pos = new BasicGeoposition() { Longitude = position.Longitude, Latitude = position.Latitude };
             var newItem = MapElementItemFactoryService.GetMapIconItem(title, pos, layer);
             AddMapElementItem(newItem);
-            await DatabaseAccessService.InsertMapIconItem(newItem);
+            await DatabaseAccessService.InsertMapIconItemAsync(newItem);
         }
 
         private async Task CreateAndAddMapPolylineAsync(IReadOnlyList<BasicGeoposition> path, Color strokeColor, string name, MapLayerItem layer, double width)
         {
             var newItem = MapElementItemFactoryService.GetMapPolylineItem(name, path, layer, strokeColor, width);
             AddMapElementItem(newItem);
-            await DatabaseAccessService.InsertMapPolylineItem(newItem);
+            await DatabaseAccessService.InsertMapPolylineItemAsync(newItem);
         }
 
         private async Task CreateAndAddMapPolygonAsync(IReadOnlyList<BasicGeoposition> path, Color fillColor, Color strokeColor, string name, MapLayerItem layer)
         {
             var newItem = MapElementItemFactoryService.GetMapPolygonItem(name, path, layer, strokeColor, fillColor);
             AddMapElementItem(newItem);
-            await DatabaseAccessService.InsertMapPolygonItem(newItem);
+            await DatabaseAccessService.InsertMapPolygonItemAsync(newItem);
         }
 
         private async Task DeleteMapElementItem(MapElementItem item)
         {
             mapControl.MapElements.Remove(item.Element);
             MapElements.Remove(item);
-            await DatabaseAccessService.DeleteMapElement(item.Id);
+            await DatabaseAccessService.DeleteMapElementAsync(item.Id);
         }
 
         public async Task DeleteSelectedMapElementItem()
@@ -363,21 +363,21 @@ namespace MapApp.Views
             UpdateAddButtonsVisibility();
         }
 
-        private async void AddPolylineButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPolylineButton_AddClicked(object sender, Controls.AddButtonClickedEventArgs e)
         {
             await CreateAndAddMapPolylineAsync((TmpMapElements.First() as MapPolyline).Path.Positions, e.BorderColor, e.Name, e.Layer, e.Width);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
-        private async void AddPolygonButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPolygonButton_AddClicked(object sender, Controls.AddButtonClickedEventArgs e)
         {
             await CreateAndAddMapPolygonAsync((TmpMapElements.First() as MapPolyline).Path.Positions, e.FillColor, e.BorderColor, e.Name, e.Layer);
             RemoveTmpMapElements();
             UpdateAddButtonsVisibility();
         }
 
-        private async void AddPinButton_AddClicked(object sender, Controls.AddMapElementButtonFlyoutAddButtonClickedEventArgs e)
+        private async void AddPinButton_AddClicked(object sender, Controls.AddButtonClickedEventArgs e)
         {
             await CreateAndAddMapIconAsync((TmpMapElements.Last() as MapIcon).Location.Position, e.Name, e.Layer);
             RemoveTmpMapElements();

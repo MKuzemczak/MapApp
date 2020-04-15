@@ -109,7 +109,7 @@
                                               IsLayersComboBoxVisible="True"
                                               IsWidthNumberBoxVisible="True"
                                               Layers="{x:Bind MapLayers}"
-                                              AddClicked="AddPolylineButton_AddClicked"/>
+                                              AddButtonClicked="AddPolylineButton_AddClicked"/>
                 <controls:AddMapElementButton x:Name="addPolygonButton"
                                               ContentSource="ms-appx:///Assets/Maps-Polygon-icon.png"
                                               Visibility="Collapsed"
@@ -118,14 +118,14 @@
                                               IsFillColorPickVisible="True"
                                               IsLayersComboBoxVisible="True"
                                               Layers="{x:Bind MapLayers}"
-                                              AddClicked="AddPolygonButton_AddClicked"/>
+                                              AddButtonClicked="AddPolygonButton_AddClicked"/>
                 <controls:AddMapElementButton x:Name="addPinButton"
                                               ContentSource="ms-appx:///Assets/Map-Add-Pin-icon.png"
                                               Visibility="Collapsed"
                                               IsNameTextBoxVisible="True"
                                               IsLayersComboBoxVisible="True"
                                               Layers="{x:Bind MapLayers}"
-                                              AddClicked="AddPinButton_AddClicked"/>
+                                              AddButtonClicked="AddPinButton_AddClicked"/>
                 
                 <Button
                     x:Name="cancelButton"

@@ -18,27 +18,27 @@ using Windows.UI;
 
 namespace MapApp.DatabaseAccess
 {
+
+    /// <summary>
+    /// Provides static methods for initializing the map's database, extracting and inserting data.
+    /// </summary>
     public static class DatabaseAccessService
     {
+        /// <value> Gets or sets a boolean value that indicates if the database was initialized. </value>
         public static bool Initialized = false;
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <value> Gets the database file name. </value>
         public static readonly string DBFileName = "sqlite.db";
 
-        /// <summary>
-        /// 
-        /// </summary>
+        /// <value> Gets the database file path. </value>
         public static string DbFile
         {
             get { return Path.Combine(ApplicationData.Current.LocalFolder.Path, DBFileName); }
         }
 
         /// <summary>
-        /// 
+        /// Initializes the database.
         /// </summary>
-        /// <returns></returns>
         private static async Task InitializeAsync()
         {
             await ApplicationData.Current.LocalFolder.CreateFileAsync(DBFileName, CreationCollisionOption.OpenIfExists);
@@ -46,9 +46,8 @@ namespace MapApp.DatabaseAccess
         }
 
         /// <summary>
-        /// 
+        /// Creates a new connection to the database.
         /// </summary>
-        /// <returns></returns>
         public static async Task<SQLiteConnection> GetDbConnectionAsync()
         {
             if (!Initialized)
@@ -58,7 +57,7 @@ namespace MapApp.DatabaseAccess
         }
 
         /// <summary>
-        /// 
+        /// Creates the database, all its tables and triggers.
         /// </summary>
         public static async Task CreateDatabaseAsync()
         {
@@ -107,7 +106,11 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public static async Task InsertLayer(MapLayerItem layer)
+        /// <summary>
+        /// Inserts a new layer into the database
+        /// </summary>
+        /// <param name="layer">Object containing porperties to be inserted into the database.</param>
+        public static async Task InsertLayerAsync(MapLayerItem layer)
         {
             using (var cnn = await GetDbConnectionAsync())
             {
@@ -119,7 +122,11 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public static async Task<List<MapLayerItem>> GetLayers()
+        /// <summary>
+        /// Gets list of all layers in the database.
+        /// </summary>
+        /// <returns><b>List</b> containing <b>Maplayeritem</b> objects populated with data from database.</returns>
+        public static async Task<List<MapLayerItem>> GetLayersAsync()
         {
             var result = new List<MapLayerItem>();
 
@@ -133,7 +140,11 @@ namespace MapApp.DatabaseAccess
             return result;
         }
 
-        public static async Task InsertMapIconItem(MapIconItem item)
+        /// <summary>
+        /// Inserts a new map icon into the database.
+        /// </summary>
+        /// <param name="item">Object containing porperties to be inserted into the database.</param>
+        public static async Task InsertMapIconItemAsync(MapIconItem item)
         {
             using (var cnn = await GetDbConnectionAsync())
             {
@@ -157,7 +168,11 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public static async Task<List<MapIconItem>> GetMapIconItems()
+        /// <summary>
+        /// Gets list of all map icons stored in the database.
+        /// </summary>
+        /// <returns><b>List</b> containing <b>MapIconItem</b> objects populated with data from database.</returns>
+        public static async Task<List<MapIconItem>> GetMapIconItemsAsync()
         {
             var result = new List<MapIconItem>();
             using (var cnn = await GetDbConnectionAsync())
@@ -185,7 +200,11 @@ namespace MapApp.DatabaseAccess
             return result;
         }
 
-        public static async Task InsertMapPolylineItem(MapPolylineItem item)
+        /// <summary>
+        /// Inserts a new map polyline into the database.
+        /// </summary>
+        /// <param name="item">Object containing porperties to be inserted into the database.</param>
+        public static async Task InsertMapPolylineItemAsync(MapPolylineItem item)
         {
             using (var cnn = await GetDbConnectionAsync())
             {
@@ -220,7 +239,11 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public static async Task<List<MapPolylineItem>> GetMapPolylineItems()
+        /// <summary>
+        /// Gets list of all map polylines stored in the database.
+        /// </summary>
+        /// <returns><b>List</b> containing <b>MapPolylineItem</b> objects populated with data from database.</returns>
+        public static async Task<List<MapPolylineItem>> GetMapPolylineItemsAsync()
         {
             var result = new List<MapPolylineItem>();
             using (var cnn = await GetDbConnectionAsync())
@@ -268,7 +291,11 @@ namespace MapApp.DatabaseAccess
             return result;
         }
 
-        public static async Task InsertMapPolygonItem(MapPolygonItem item)
+        /// <summary>
+        /// Inserts a new map polygon into the database.
+        /// </summary>
+        /// <param name="item">Object containing porperties to be inserted into the database.</param>
+        public static async Task InsertMapPolygonItemAsync(MapPolygonItem item)
         {
             using (var cnn = await GetDbConnectionAsync())
             {
@@ -303,7 +330,11 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public static async Task<List<MapPolygonItem>> GetMapPolygonItems()
+        /// <summary>
+        /// Gets list of all map polygons stored in the database.
+        /// </summary>
+        /// <returns><b>List</b> containing <b>MapPolygonItem</b> objects populated with data from database.</returns>
+        public static async Task<List<MapPolygonItem>> GetMapPolygonItemsAsync()
         {
             var result = new List<MapPolygonItem>();
             using (var cnn = await GetDbConnectionAsync())
@@ -352,13 +383,17 @@ namespace MapApp.DatabaseAccess
             return result;
         }
 
+        /// <summary>
+        /// Gets list of all map elements stored in the database.
+        /// </summary>
+        /// <returns><b>List</b> containing objects inherited from <b>MapElementItem</b>, populated with data from database.</returns>
         public static async Task<List<MapElementItem>> GetMapElementItemsAsync()
         {
             var result = new List<MapElementItem>();
 
-            var icons = await GetMapIconItems();
-            var polylines = await GetMapPolylineItems();
-            var polygons = await GetMapPolygonItems();
+            var icons = await GetMapIconItemsAsync();
+            var polylines = await GetMapPolylineItemsAsync();
+            var polygons = await GetMapPolygonItemsAsync();
 
             result.AddRange(icons);
             result.AddRange(polylines);
@@ -367,7 +402,11 @@ namespace MapApp.DatabaseAccess
             return result;
         }
 
-        public static async Task DeleteMapElement(int id)
+        /// <summary>
+        /// Deletes MapElement from database.
+        /// </summary>
+        /// <param name="id">The database Id of the deleted MapElement</param>
+        public static async Task DeleteMapElementAsync(int id)
         {
             using (var cnn = await GetDbConnectionAsync())
             {
@@ -377,7 +416,7 @@ namespace MapApp.DatabaseAccess
             }
         }
 
-        public class TmpMapElementContainer
+        class TmpMapElementContainer
         {
             public int Id { get; set; }
             public string Name { get; set; }

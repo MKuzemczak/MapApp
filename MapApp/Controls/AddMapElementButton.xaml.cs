@@ -22,9 +22,18 @@ using System.Collections.ObjectModel;
 
 namespace MapApp.Controls
 {
+    /// <summary>
+    /// A custom AddMapElementButton button control.
+    /// </summary>
+    /// <remarks>
+    /// Contains a definition of a flyout that allows user to type in added map element's properties.
+    /// Contains properties for storing map element's properties and controlling which items are displayed in the flyout.
+    /// </remarks>
     public sealed partial class AddMapElementButton : UserControl
     {
         private Color _borderColor = Color.FromArgb(255, 255, 255, 255);
+
+        /// <value> Gets or sets the border (stroke) color value of added map element. </value>
         public Color BorderColor
         {
             get
@@ -39,6 +48,8 @@ namespace MapApp.Controls
         }
 
         private Color _fillColor = Color.FromArgb(255, 255, 255, 255);
+
+        /// <value> Gets or sets the fill color value of added map element. </value>
         public Color FillColor
         {
             get
@@ -54,6 +65,8 @@ namespace MapApp.Controls
 
         private SolidColorBrush BorderColorBrush { get; set; } = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
         private SolidColorBrush FillColorBrush { get; set; } = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
+
+        /// <value> Gets the name of added map element entered in the flyout's "Name" text box. </value>
         public string NameTextBoxContent
         {
             get
@@ -62,89 +75,90 @@ namespace MapApp.Controls
             }
         }
 
-
-
+        /// <value> Gets or sets the list of layers diplayed in the flyout's "Layer" combo box. </value>
         public ObservableCollection<MapLayerItem> Layers
         {
             get { return (ObservableCollection<MapLayerItem>)GetValue(LayersProperty); }
             set { SetValue(LayersProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for Layers.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the Layers dependency property. </value>
         public static readonly DependencyProperty LayersProperty =
             DependencyProperty.Register("Layers", typeof(ObservableCollection<MapLayerItem>), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-
+        /// <value> Gets or sets the image (icon) that's displayed as the button's content. </value>
         public ImageSource ContentSource
         {
             get { return (ImageSource)GetValue(ContentSourceProperty); }
             set { SetValue(ContentSourceProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for ContentSource.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the ContentSource dependency property. </value>
         public static readonly DependencyProperty ContentSourceProperty =
             DependencyProperty.Register("ContentSource", typeof(ImageSource), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-
+        /// <value> Gets or sets the boolean variable that determines the flyout's "Name" text box visibility. </value>
         public bool IsNameTextBoxVisible
         {
             get { return (bool)GetValue(IsNameTextBoxVisibleProperty); }
             set { SetValue(IsNameTextBoxVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsNameTextBoxVisible.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the <code>IsNameTextBoxVisible</code> dependency property. </value>
         public static readonly DependencyProperty IsNameTextBoxVisibleProperty =
             DependencyProperty.Register("IsNameTextBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-
+        /// <value> Gets or sets the boolean variable that determines the flyout's "Border color" color picker button visibility. </value>
         public bool IsBorderColorPickVisible
         {
             get { return (bool)GetValue(IsBorderColorPickVisibleProperty); }
             set { SetValue(IsBorderColorPickVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsBorderColorPickVisible.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the <code>IsBorderColorPickVisible</code> dependency property. </value>
         public static readonly DependencyProperty IsBorderColorPickVisibleProperty =
             DependencyProperty.Register("IsBorderColorPickVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-
+        /// <value> Gets or sets the boolean variable that determines the flyout's "Fill color" color picker button visibility. </value>
         public bool IsFillColorPickVisible
         {
             get { return (bool)GetValue(IsFillColorPickVisibleProperty); }
             set { SetValue(IsFillColorPickVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsFillColorPickVisible.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the <code>IsFillColorPickVisible</code> dependency property. </value>
         public static readonly DependencyProperty IsFillColorPickVisibleProperty =
             DependencyProperty.Register("IsFillColorPickVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-
+        /// <value> Gets or sets the boolean variable that determines the flyout's "layer" combo box visibility. </value>
         public bool IsLayersComboBoxVisible
         {
             get { return (bool)GetValue(IsLayersComboBoxVisibleProperty); }
             set { SetValue(IsLayersComboBoxVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsLayersComboBoxVisible.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the <code>IsLayerComboBoxVisible</code> dependency property. </value>
         public static readonly DependencyProperty IsLayersComboBoxVisibleProperty =
             DependencyProperty.Register("IsLayersComboBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-
+        /// <value> Gets or sets the boolean variable that determines the flyout's "Width" number box visibility. </value>
         public bool IsWidthNumberBoxVisible
         {
             get { return (bool)GetValue(IsWidthNumberBoxVisibleProperty); }
             set { SetValue(IsWidthNumberBoxVisibleProperty, value); }
         }
 
-        // Using a DependencyProperty as the backing store for IsWidthNumberBoxVisible.  This enables animation, styling, binding, etc...
+        /// <value> Identifies the <code>IsWidthNumberBoxVisible</code> dependency property. </value>
         public static readonly DependencyProperty IsWidthNumberBoxVisibleProperty =
             DependencyProperty.Register("IsWidthNumberBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-
+        /// <summary>
+        /// Initializes a new instance of the AddMapElementButton class.
+        /// </summary>
         public AddMapElementButton()
         {
             IsNameTextBoxVisible = false;
@@ -185,7 +199,10 @@ namespace MapApp.Controls
 
         }
 
-        public event EventHandler<AddMapElementButtonFlyoutAddButtonClickedEventArgs> AddClicked;
+        /// <summary>
+        /// Occurs when the flyout's "Add" button was clicked
+        /// </summary>
+        public event EventHandler<AddButtonClickedEventArgs> AddButtonClicked;
 
         private void AddButton_Click(object sender, RoutedEventArgs e)
         {
@@ -226,8 +243,8 @@ namespace MapApp.Controls
                 }
             }
 
-            AddClicked?.Invoke(this,
-                new AddMapElementButtonFlyoutAddButtonClickedEventArgs(NameTextBoxContent, BorderColor, FillColor, layersCombo.SelectedItem as MapLayerItem, widthNumberBox.Value));
+            AddButtonClicked?.Invoke(this,
+                new AddButtonClickedEventArgs(NameTextBoxContent, BorderColor, FillColor, layersCombo.SelectedItem as MapLayerItem, widthNumberBox.Value));
             button.Flyout.Hide();
             nameTextBox.Text = "";
         }
@@ -263,15 +280,35 @@ namespace MapApp.Controls
         }
     }
 
-    public class AddMapElementButtonFlyoutAddButtonClickedEventArgs : EventArgs
+    /// <summary>
+    /// Provides event data for the AddButtonClicked event from AddMapElementButton.
+    /// </summary>
+    public class AddButtonClickedEventArgs : EventArgs
     {
+        /// <value> Gets the name of the added map element. </value>
         public readonly string Name;
+
+        /// <value> Gets the border (stroke) color of the added map element. </value>
         public readonly Color BorderColor;
+
+        /// <value> Gets the fill color of the added map element. </value>
         public readonly Color FillColor;
+
+        /// <value> Gets the layer of the added map element. </value>
         public readonly MapLayerItem Layer;
+
+        /// <value> Gets the width of the added map element. </value>
         public readonly double Width;
 
-        public AddMapElementButtonFlyoutAddButtonClickedEventArgs(string name, Color border, Color fill, MapLayerItem layer, double width)
+        /// <summary>
+        /// Initializes a new instance of the AddButtonClickedEventArgs class.
+        /// </summary>
+        /// <param name="name">Name of the added map element.</param>
+        /// <param name="border">Border (stroke) color of the added map element.</param>
+        /// <param name="fill">Fill color of the added map element.</param>
+        /// <param name="layer">Layer of the added map element.</param>
+        /// <param name="width">Width of the added map element.</param>
+        public AddButtonClickedEventArgs(string name, Color border, Color fill, MapLayerItem layer, double width)
         {
             Name = name;
             BorderColor = border;
