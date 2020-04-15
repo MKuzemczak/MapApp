@@ -21,5 +21,14 @@ namespace MapApp.Models
         public Color FillColor { get { return (Color)((Element as MapPolygon)?.FillColor); } }
 
         public IReadOnlyList<BasicGeoposition> Path { get { return (Element as MapPolygon)?.Paths.First().Positions; } }
+
+        public override BasicGeoposition GetPosition()
+        {
+            if (Element is MapPolygon)
+            {
+                return (Element as MapPolygon).Paths.FirstOrDefault().Positions.FirstOrDefault();
+            }
+            return base.GetPosition();
+        }
     }
 }

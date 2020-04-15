@@ -140,6 +140,9 @@
     <Compile Include="Controls\AddMapElementButton.xaml.cs">
       <DependentUpon>AddMapElementButton.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Controls\WeatherControl.xaml.cs">
+      <DependentUpon>WeatherControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="DatabaseAccess\DatabaseAccessService.cs" />
     <Compile Include="Helpers\EnumToBooleanConverter.cs" />
     <Compile Include="Helpers\GeoMath.cs" />
@@ -154,6 +157,7 @@
     <Compile Include="Models\MapIconItem.cs" />
     <Compile Include="Models\MapPolygonItem.cs" />
     <Compile Include="Models\MapPolylineItem.cs" />
+    <Compile Include="Models\WeatherItem.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
     <Compile Include="Services\DragAndDrop\DragDropService.cs" />
@@ -164,6 +168,7 @@
     <Compile Include="Services\MapElementItemFactoryService.cs" />
     <Compile Include="Services\NavigationService.cs" />
     <Compile Include="Services\ThemeSelectorService.cs" />
+    <Compile Include="Services\WeatherService.cs" />
     <Compile Include="TemplateSelectors\MapElementTemplateSelector.cs" />
     <Compile Include="Views\DetailsPage.xaml.cs">
       <DependentUpon>DetailsPage.xaml</DependentUpon>
@@ -189,6 +194,10 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Controls\AddMapElementButton.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Controls\WeatherControl.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
@@ -253,6 +262,42 @@
     <Content Include="Assets\Maps-Polygon-icon.png" />
     <Content Include="Assets\Maps-Polyline-icon.png" />
     <Content Include="Assets\tmpMapPin.png" />
+    <Content Include="Assets\WeatherIconsBlack\01d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\01n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\02d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\02n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\03d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\03n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\04d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\04n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\09d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\09n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\10d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\10n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\11d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\11n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\13d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\13n.svg" />
+    <Content Include="Assets\WeatherIconsBlack\50d.svg" />
+    <Content Include="Assets\WeatherIconsBlack\50n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\01d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\01n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\02d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\02n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\03d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\03n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\04d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\04n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\09d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\09n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\10d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\10n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\11d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\11n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\13d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\13n.svg" />
+    <Content Include="Assets\WeatherIconsWhite\50d.svg" />
+    <Content Include="Assets\WeatherIconsWhite\50n.svg" />
     <Content Include="Properties\Default.rd.xml" />
     <Content Include="Assets\LockScreenLogo.scale-200.png" />
     <Content Include="Assets\SplashScreen.scale-200.png" />

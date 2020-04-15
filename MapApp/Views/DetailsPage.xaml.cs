@@ -16,6 +16,10 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
+using MapApp.Models;
+using MapApp.Services;
+using System.Threading.Tasks;
+
 // The Blank Page item template is documented at https://go.microsoft.com/fwlink/?LinkId=234238
 
 namespace MapApp.Views
@@ -38,9 +42,11 @@ namespace MapApp.Views
             this.InitializeComponent();
         }
 
-        public void SelectItem(object item)
+        public async Task SelectItem(object item)
         {
             SelectedItem = item;
+            var pos = (SelectedItem as MapElementItem).GetPosition();
+            weatherControl.Weather = await WeatherService.GetAsync(pos.Latitude, pos.Longitude);
         }
 
         public event PropertyChangedEventHandler PropertyChanged;

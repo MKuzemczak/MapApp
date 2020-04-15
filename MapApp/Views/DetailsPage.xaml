@@ -10,6 +10,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:helpers="using:MapApp.Helpers"
     xmlns:models="using:MapApp.Models"
+    xmlns:controls="using:MapApp.Controls"
     mc:Ignorable="d"
     Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
     <Page.Resources>
@@ -191,11 +192,14 @@
             MapPolygonTemplate="{StaticResource MapPolygonTemplate}"/>
     </Page.Resources>
     <Grid>
-        <ScrollViewer HorizontalAlignment="Stretch">
-            <ContentControl Content="{x:Bind SelectedItem, Mode=OneWay}"
-                            ContentTemplateSelector="{StaticResource DetailsTemplateSelector}"
-                            HorizontalAlignment="Stretch"
-                            HorizontalContentAlignment="Stretch"/>
-        </ScrollViewer>
+        <StackPanel>
+            <ScrollViewer HorizontalAlignment="Stretch">
+                <ContentControl Content="{x:Bind SelectedItem, Mode=OneWay}"
+                                ContentTemplateSelector="{StaticResource DetailsTemplateSelector}"
+                                HorizontalAlignment="Stretch"
+                                HorizontalContentAlignment="Stretch"/>
+            </ScrollViewer>
+            <controls:WeatherControl x:Name="weatherControl"/>
+        </StackPanel>
     </Grid>
 </Page>

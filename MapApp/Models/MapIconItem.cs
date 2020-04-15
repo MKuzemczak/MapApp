@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using Windows.Devices.Geolocation;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MapApp.Models
@@ -18,6 +19,15 @@ namespace MapApp.Models
                 (Element as MapIcon).Title = newName;
             }
             base.SetName(newName);
+        }
+
+        public override BasicGeoposition GetPosition()
+        {
+            if (Element is MapIcon)
+            {
+                return (Element as MapIcon).Location.Position;
+            }
+            return base.GetPosition();
         }
     }
 }

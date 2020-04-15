@@ -24,6 +24,15 @@ namespace MapApp.Models
         public IReadOnlyList<BasicGeoposition> PolygonRepresentationPath { get { return (Element as MapPolygon)?.Paths.First().Positions; } }
 
         public IReadOnlyList<BasicGeoposition> Path { get; set; }
+
+        public override BasicGeoposition GetPosition()
+        {
+            if (Element is MapPolygon)
+            {
+                return (Element as MapPolygon).Paths.FirstOrDefault().Positions.FirstOrDefault();
+            }
+            return base.GetPosition();
+        }
     }
 
 

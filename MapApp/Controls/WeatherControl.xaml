@@ -1,0 +1,29 @@
+﻿<UserControl
+    x:Class="MapApp.Controls.WeatherControl"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:MapApp.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    d:DesignHeight="200"
+    d:DesignWidth="400">
+
+    <Grid>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*" />
+            <ColumnDefinition Width="*" />
+        </Grid.ColumnDefinitions>
+        <Image x:Name="weatherIconImage"
+               Grid.Column="0"/>
+        <StackPanel Grid.Column="1"
+                    VerticalAlignment="Stretch" >
+            <TextBlock x:Name="tempTextBlock"
+                       FontSize="45"/>
+            <TextBlock x:Name="pressureTextBlock"
+                       FontSize="20" />
+            <TextBlock x:Name="windSpeedTextBlock"
+                       FontSize="20" />
+        </StackPanel>
+    </Grid>
+</UserControl>

@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 
+using Windows.Devices.Geolocation;
 using Windows.UI.Xaml.Controls.Maps;
 
 namespace MapApp.Models
@@ -35,6 +36,11 @@ namespace MapApp.Models
         protected virtual void SetName(string newName)
         {
             _name = newName;
+        }
+
+        public virtual BasicGeoposition GetPosition()
+        {
+            return new BasicGeoposition();
         }
     }
 }
