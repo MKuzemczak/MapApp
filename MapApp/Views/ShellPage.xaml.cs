@@ -18,6 +18,9 @@ using WinUI = Microsoft.UI.Xaml.Controls;
 namespace MapApp.Views
 {
     // TODO WTS: Change the icons and titles for all NavigationViewItems in ShellPage.xaml.
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class ShellPage : Page, INotifyPropertyChanged
     {
         private readonly KeyboardAccelerator _altLeftKeyboardAccelerator = BuildKeyboardAccelerator(VirtualKey.Left, VirtualKeyModifiers.Menu);
@@ -26,18 +29,27 @@ namespace MapApp.Views
         private bool _isBackEnabled;
         private WinUI.NavigationViewItem _selected;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public bool IsBackEnabled
         {
             get { return _isBackEnabled; }
             set { Set(ref _isBackEnabled, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public WinUI.NavigationViewItem Selected
         {
             get { return _selected; }
             set { Set(ref _selected, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ShellPage()
         {
             InitializeComponent();
@@ -125,6 +137,9 @@ namespace MapApp.Views
             args.Handled = result;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)

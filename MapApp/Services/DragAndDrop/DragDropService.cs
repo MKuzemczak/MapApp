@@ -7,7 +7,10 @@ using Windows.UI.Xaml.Media.Imaging;
 
 namespace MapApp.Services.DragAndDrop
 {
-    // For instructions on testing this service see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/features/drag-and-drop.md
+    /// <summary>
+    /// For instructions on testing this service see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/features/drag-and-drop.md
+    /// </summary>
+
     public class DragDropService
     {
         private static DependencyProperty configurationProperty = DependencyProperty.RegisterAttached(
@@ -22,6 +25,11 @@ namespace MapApp.Services.DragAndDrop
         typeof(DragDropService),
         new PropertyMetadata(null, OnVisualConfigurationPropertyChanged));
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <param name="value"></param>
         public static void SetConfiguration(DependencyObject dependencyObject, DropConfiguration value)
         {
             if (dependencyObject != null)
@@ -30,11 +38,21 @@ namespace MapApp.Services.DragAndDrop
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
         public static DropConfiguration GetConfiguration(DependencyObject dependencyObject)
         {
             return (DropConfiguration)dependencyObject.GetValue(configurationProperty);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <param name="value"></param>
         public static void SetVisualConfiguration(DependencyObject dependencyObject, VisualDropConfiguration value)
         {
             if (dependencyObject != null)
@@ -43,6 +61,11 @@ namespace MapApp.Services.DragAndDrop
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="dependencyObject"></param>
+        /// <returns></returns>
         public static VisualDropConfiguration GetVisualConfiguration(DependencyObject dependencyObject)
         {
             return (VisualDropConfiguration)dependencyObject.GetValue(visualConfigurationProperty);

@@ -7,15 +7,28 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MapApp.Services
 {
+
+    /// <summary>
+    /// 
+    /// </summary>
     public static class NavigationService
     {
+        /// <summary>
+        /// 
+        /// </summary>
         public static event NavigatedEventHandler Navigated;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static event NavigationFailedEventHandler NavigationFailed;
 
         private static Frame _frame;
         private static object _lastParamUsed;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static Frame Frame
         {
             get
@@ -37,10 +50,19 @@ namespace MapApp.Services
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool CanGoBack => Frame.CanGoBack;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool CanGoForward => Frame.CanGoForward;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool GoBack()
         {
             if (CanGoBack)
@@ -52,8 +74,14 @@ namespace MapApp.Services
             return false;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static void GoForward() => Frame.GoForward();
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool Navigate(Type pageType, object parameter = null, NavigationTransitionInfo infoOverride = null)
         {
             // Don't open the same page multiple times
@@ -73,6 +101,9 @@ namespace MapApp.Services
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static bool Navigate<T>(object parameter = null, NavigationTransitionInfo infoOverride = null)
             where T : Page
             => Navigate(typeof(T), parameter, infoOverride);

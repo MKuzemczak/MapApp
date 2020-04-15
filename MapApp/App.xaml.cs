@@ -7,6 +7,9 @@ using Windows.UI.Xaml;
 
 namespace MapApp
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class App : Application
     {
         private Lazy<ActivationService> _activationService;
@@ -16,6 +19,9 @@ namespace MapApp
             get { return _activationService.Value; }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public App()
         {
             InitializeComponent();
@@ -25,6 +31,9 @@ namespace MapApp
             int a = 0;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override async void OnLaunched(LaunchActivatedEventArgs args)
         {
             if (!args.PrelaunchActivated)
@@ -33,6 +42,9 @@ namespace MapApp
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override async void OnActivated(IActivatedEventArgs args)
         {
             await ActivationService.ActivateAsync(args);

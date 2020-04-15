@@ -9,24 +9,42 @@ using Windows.UI.Core;
 
 namespace MapApp.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public class LocationService
     {
         private Geolocator _geolocator;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event EventHandler<Geoposition> PositionChanged;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Geoposition CurrentPosition { get; private set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Task<bool> InitializeAsync()
         {
             return InitializeAsync(100);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public Task<bool> InitializeAsync(uint desiredAccuracyInMeters)
         {
             return InitializeAsync(desiredAccuracyInMeters, (double)desiredAccuracyInMeters / 2);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public async Task<bool> InitializeAsync(uint desiredAccuracyInMeters, double movementThreshold)
         {
             // More about getting location at https://docs.microsoft.com/windows/uwp/maps-and-location/get-location
@@ -59,7 +77,10 @@ namespace MapApp.Services
 
             return result;
         }
-
+        
+        /// <summary>
+        /// 
+        /// </summary>
         public async Task StartListeningAsync()
         {
             if (_geolocator == null)
@@ -72,6 +93,9 @@ namespace MapApp.Services
             CurrentPosition = await _geolocator.GetGeopositionAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public void StopListening()
         {
             if (_geolocator == null)

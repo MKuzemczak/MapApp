@@ -13,18 +13,40 @@ using System.Collections.ObjectModel;
 
 namespace MapApp.Models
 {
+    /// <summary>
+    /// Extends <b>MapPolyline</b> with additional data needed in app.
+    /// </summary>
     public class MapPolylineItem : MapElementItem
     {
+        /// <summary>
+        /// Gets or sets the length of the polyline.
+        /// </summary>
         public double Length { get; set; }
 
+        /// <summary>
+        /// Gets or sets the width of the polyline.
+        /// </summary>
         public double Width { get; set; }
 
+        /// <summary>
+        /// Gets the polyline color.
+        /// </summary>
         public Color StrokeColor { get { return (Color)((Element as MapPolygon)?.StrokeColor); } }
 
+        /// <summary>
+        /// Gets the list of polygon vertices that represent the polyline on map
+        /// </summary>
         public IReadOnlyList<BasicGeoposition> PolygonRepresentationPath { get { return (Element as MapPolygon)?.Paths.First().Positions; } }
 
+        /// <summary>
+        /// Gets the list of polyline point
+        /// </summary>
         public IReadOnlyList<BasicGeoposition> Path { get; set; }
 
+        /// <summary>
+        /// Gets a single geoposition that represents the polyline.
+        /// </summary>
+        /// <returns>Geographical position.</returns>
         public override BasicGeoposition GetPosition()
         {
             if (Element is MapPolygon)
@@ -33,17 +55,5 @@ namespace MapApp.Models
             }
             return base.GetPosition();
         }
-    }
-
-
-    [Serializable]
-    public class MapElementTypeMismatchException : Exception
-    {
-        public MapElementTypeMismatchException() { }
-        public MapElementTypeMismatchException(string message) : base(message) { }
-        public MapElementTypeMismatchException(string message, Exception inner) : base(message, inner) { }
-        protected MapElementTypeMismatchException(
-          System.Runtime.Serialization.SerializationInfo info,
-          System.Runtime.Serialization.StreamingContext context) : base(info, context) { }
     }
 }

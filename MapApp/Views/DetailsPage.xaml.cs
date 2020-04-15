@@ -25,30 +25,44 @@ using System.Threading.Tasks;
 namespace MapApp.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page that displays MapElementItem info.
     /// </summary>
     public sealed partial class DetailsPage : Page, INotifyPropertyChanged
     {
         private object _selectedItem;
 
+        /// <summary>
+        /// The currently displayed item.
+        /// </summary>
         public object SelectedItem
         {
             get { return _selectedItem; }
             set { Set(ref _selectedItem, value); }
         }
 
+        /// <summary>
+        /// Creates a new instance of DetailsPage class.
+        /// </summary>
         public DetailsPage()
         {
             this.InitializeComponent();
         }
 
-        public async Task SelectItem(object item)
+        /// <summary>
+        /// Populates the page with data.
+        /// </summary>
+        /// <param name="item">Item containing data.</param>
+        /// <returns></returns>
+        public async Task SelectItemAsync(object item)
         {
             SelectedItem = item;
             var pos = (SelectedItem as MapElementItem).GetPosition();
             weatherControl.Weather = await WeatherService.GetAsync(pos.Latitude, pos.Longitude);
         }
 
+        /// <summary>
+        /// Occurs when a property changes.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
@@ -64,6 +78,9 @@ namespace MapApp.Views
 
         private void OnPropertyChanged(string propertyName) => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
 
+        /// <summary>
+        /// Occurs when the delete button is clicked.
+        /// </summary>
         public event EventHandler DeleteButtonClick;
 
         private void DeleteButton_Click(object sender, RoutedEventArgs e)

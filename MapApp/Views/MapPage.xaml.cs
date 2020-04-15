@@ -23,14 +23,17 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MapApp.Views
 {
+    /// <summary>
+    /// Page that displays map as well as its content and controls.
+    /// </summary>
     public sealed partial class MapPage : Page, INotifyPropertyChanged
     {
-        // TODO WTS: Set your preferred default zoom level
+        
         private const double DefaultZoomLevel = 17;
 
         private readonly LocationService _locationService;
 
-        // TODO WTS: Set your preferred default location if a geolock can't be found.
+        
         private readonly BasicGeoposition _defaultPosition = new BasicGeoposition()
         {
             Latitude = 47.609425,
@@ -39,6 +42,9 @@ namespace MapApp.Views
 
         private double _zoomLevel;
 
+        /// <summary>
+        /// Gets or sets the current zoom level, i.e., the altitude of the camera above the ground.
+        /// </summary>
         public double ZoomLevel
         {
             get { return _zoomLevel; }
@@ -47,6 +53,9 @@ namespace MapApp.Views
 
         private Geopoint _center;
 
+        /// <summary>
+        /// Gets or sets the looked-at point.
+        /// </summary>
         public Geopoint Center
         {
             get { return _center; }
@@ -56,9 +65,16 @@ namespace MapApp.Views
         private ObservableCollection<MapLayerItem> MapLayers = new ObservableCollection<MapLayerItem>();
         private List<MapElementItem> MapElements = new List<MapElementItem>();
         private List<MapElement> TmpMapElements = new List<MapElement>();
+
+        /// <summary>
+        /// Gets or sets the currently selected element, its info is to be displayed on details page.
+        /// </summary>
         public MapElementItem SelectedElement { get; set; }
         private bool _mapClickWasElementClick = false;
 
+        /// <summary>
+        /// Creates a new instance of MapPage class.
+        /// </summary>
         public MapPage()
         {
             _locationService = new LocationService();
@@ -67,17 +83,29 @@ namespace MapApp.Views
             InitializeComponent();
         }
 
+        /// <summary>
+        /// Called by the <b>NavigationService</b> when the page is navigated to
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await InitializeAsync();
             UpdateAddButtonsVisibility();
         }
 
+        /// <summary>
+        /// Called by the <b>NavigationService</b> when the page is navigated from
+        /// </summary>
+        /// <param name="e"></param>
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             Cleanup();
         }
 
+        /// <summary>
+        /// Initializes the map page, populates it with data from the database.
+        /// </summary>
+        /// <returns></returns>
         public async Task InitializeAsync()
         {
             MapLayers = new ObservableCollection<MapLayerItem>(await DatabaseAccessService.GetLayersAsync());
@@ -116,6 +144,9 @@ namespace MapApp.Views
             }
         }
 
+        /// <summary>
+        /// Cleanup.
+        /// </summary>
         public void Cleanup()
         {
             if (_locationService != null)
@@ -175,11 +206,20 @@ namespace MapApp.Views
             await DatabaseAccessService.DeleteMapElementAsync(item.Id);
         }
 
+        /// <summary>
+        /// Deletes the currently selected map element and all the data associated with it.
+        /// </summary>
+        /// <returns></returns>
         public async Task DeleteSelectedMapElementItem()
         {
             await DeleteMapElementItem(SelectedElement);
         }
 
+        /// <summary>
+        /// Gets MapElementItem that contains provided MapElement
+        /// </summary>
+        /// <param name="element">Element contained.</param>
+        /// <returns>Containing object.</returns>
         public MapElementItem GetMapElementItemContaining(MapElement element)
         {
             foreach (var item in MapElements)
@@ -283,6 +323,9 @@ namespace MapApp.Views
             }
         }
 
+        /// <summary>
+        /// Updates the visibility of buttons on map.
+        /// </summary>
         public void UpdateAddButtonsVisibility()
         {
             addPinButton.Visibility = Visibility.Collapsed;
@@ -310,6 +353,9 @@ namespace MapApp.Views
 
         }
 
+        /// <summary>
+        /// Occurs when a dependency property is changed.
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)
@@ -335,6 +381,9 @@ namespace MapApp.Views
             _mapClickWasElementClick = false;
         }
 
+        /// <summary>
+        /// Occurs when a map element is clicked.
+        /// </summary>
         public event EventHandler<MapElementClickedEventArgs> MapElementClick;
 
         private void MapControl_MapElementClick(MapControl sender, MapElementClickEventArgs args)
@@ -400,10 +449,20 @@ namespace MapApp.Views
         }
     }
 
+    /// <summary>
+    /// Class storing data of <b>MapElementClicked</b> event.
+    /// </summary>
     public class MapElementClickedEventArgs : EventArgs
     {
+        /// <summary>
+        /// Clicked element.
+        /// </summary>
         public MapElementItem Element { get; }
 
+        /// <summary>
+        /// Creates a new instance of MapElementClickedEventArgs class.
+        /// </summary>
+        /// <param name="element">Clicked element.</param>
         public MapElementClickedEventArgs(MapElementItem element) => Element = element;
     }
 }

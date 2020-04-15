@@ -9,9 +9,15 @@ using Windows.UI.Xaml.Controls.Maps;
 
 namespace MapApp.Models
 {
+    /// <summary>
+    /// Extends <b>MapIcon</b> with additional data needed in app.
+    /// </summary>
     public class MapIconItem : MapElementItem
     {
-
+        /// <summary>
+        /// Sets the name of the icon, both in-app and displayed on map.
+        /// </summary>
+        /// <param name="newName">New name.</param>
         protected override void SetName(string newName)
         {
             if (Element is MapIcon)
@@ -21,6 +27,10 @@ namespace MapApp.Models
             base.SetName(newName);
         }
 
+        /// <summary>
+        /// Gets a single geoposition that represents the element.
+        /// </summary>
+        /// <returns>Geographical position.</returns>
         public override BasicGeoposition GetPosition()
         {
             if (Element is MapIcon)

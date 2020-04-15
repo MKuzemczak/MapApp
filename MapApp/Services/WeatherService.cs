@@ -10,8 +10,17 @@ using MapApp.Models;
 
 namespace MapApp.Services
 {
+    /// <summary>
+    /// Containts method for retrieving weather info from web API (OpenWeatherMap).
+    /// </summary>
     public static class WeatherService
     {
+        /// <summary>
+        /// Queries web API for weather info.
+        /// </summary>
+        /// <param name="lat">Queried location latitude.</param>
+        /// <param name="lon">Queried location longitude.</param>
+        /// <returns>Object that stores retrieved data as strings.</returns>
         public static async Task<WeatherItem> GetAsync(double lat, double lon)
         {
             //Create an HTTP client object

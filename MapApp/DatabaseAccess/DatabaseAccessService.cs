@@ -24,13 +24,13 @@ namespace MapApp.DatabaseAccess
     /// </summary>
     public static class DatabaseAccessService
     {
-        /// <value> Gets or sets a boolean value that indicates if the database was initialized. </value>
+        /// <summary> Gets or sets a boolean value that indicates if the database was initialized. </summary>
         public static bool Initialized = false;
 
-        /// <value> Gets the database file name. </value>
+        /// <summary> Gets the database file name. </summary>
         public static readonly string DBFileName = "sqlite.db";
 
-        /// <value> Gets the database file path. </value>
+        /// <summary> Gets the database file path. </summary>
         public static string DbFile
         {
             get { return Path.Combine(ApplicationData.Current.LocalFolder.Path, DBFileName); }

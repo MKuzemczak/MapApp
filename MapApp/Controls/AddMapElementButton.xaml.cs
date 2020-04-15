@@ -33,7 +33,7 @@ namespace MapApp.Controls
     {
         private Color _borderColor = Color.FromArgb(255, 255, 255, 255);
 
-        /// <value> Gets or sets the border (stroke) color value of added map element. </value>
+        /// <summary> Gets or sets the border (stroke) color value of added map element. </summary>
         public Color BorderColor
         {
             get
@@ -49,7 +49,7 @@ namespace MapApp.Controls
 
         private Color _fillColor = Color.FromArgb(255, 255, 255, 255);
 
-        /// <value> Gets or sets the fill color value of added map element. </value>
+        /// <summary> Gets or sets the fill color value of added map element. </summary>
         public Color FillColor
         {
             get
@@ -66,7 +66,7 @@ namespace MapApp.Controls
         private SolidColorBrush BorderColorBrush { get; set; } = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
         private SolidColorBrush FillColorBrush { get; set; } = new SolidColorBrush(Color.FromArgb(255, 255, 255, 255));
 
-        /// <value> Gets the name of added map element entered in the flyout's "Name" text box. </value>
+        /// <summary> Gets the name of added map element entered in the flyout's "Name" text box. </summary>
         public string NameTextBoxContent
         {
             get
@@ -75,83 +75,83 @@ namespace MapApp.Controls
             }
         }
 
-        /// <value> Gets or sets the list of layers diplayed in the flyout's "Layer" combo box. </value>
+        /// <summary> Gets or sets the list of layers diplayed in the flyout's "Layer" combo box. </summary>
         public ObservableCollection<MapLayerItem> Layers
         {
             get { return (ObservableCollection<MapLayerItem>)GetValue(LayersProperty); }
             set { SetValue(LayersProperty, value); }
         }
 
-        /// <value> Identifies the Layers dependency property. </value>
+        /// <summary> Identifies the Layers dependency property. </summary>
         public static readonly DependencyProperty LayersProperty =
             DependencyProperty.Register("Layers", typeof(ObservableCollection<MapLayerItem>), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-        /// <value> Gets or sets the image (icon) that's displayed as the button's content. </value>
+        /// <summary> Gets or sets the image (icon) that's displayed as the button's content. </summary>
         public ImageSource ContentSource
         {
             get { return (ImageSource)GetValue(ContentSourceProperty); }
             set { SetValue(ContentSourceProperty, value); }
         }
 
-        /// <value> Identifies the ContentSource dependency property. </value>
+        /// <summary> Identifies the ContentSource dependency property. </summary>
         public static readonly DependencyProperty ContentSourceProperty =
             DependencyProperty.Register("ContentSource", typeof(ImageSource), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-        /// <value> Gets or sets the boolean variable that determines the flyout's "Name" text box visibility. </value>
+        /// <summary> Gets or sets the boolean variable that determines the flyout's "Name" text box visibility. </summary>
         public bool IsNameTextBoxVisible
         {
             get { return (bool)GetValue(IsNameTextBoxVisibleProperty); }
             set { SetValue(IsNameTextBoxVisibleProperty, value); }
         }
 
-        /// <value> Identifies the <code>IsNameTextBoxVisible</code> dependency property. </value>
+        /// <summary> Identifies the <code>IsNameTextBoxVisible</code> dependency property. </summary>
         public static readonly DependencyProperty IsNameTextBoxVisibleProperty =
             DependencyProperty.Register("IsNameTextBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-        /// <value> Gets or sets the boolean variable that determines the flyout's "Border color" color picker button visibility. </value>
+        /// <summary> Gets or sets the boolean variable that determines the flyout's "Border color" color picker button visibility. </summary>
         public bool IsBorderColorPickVisible
         {
             get { return (bool)GetValue(IsBorderColorPickVisibleProperty); }
             set { SetValue(IsBorderColorPickVisibleProperty, value); }
         }
 
-        /// <value> Identifies the <code>IsBorderColorPickVisible</code> dependency property. </value>
+        /// <summary> Identifies the <code>IsBorderColorPickVisible</code> dependency property. </summary>
         public static readonly DependencyProperty IsBorderColorPickVisibleProperty =
             DependencyProperty.Register("IsBorderColorPickVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
-        /// <value> Gets or sets the boolean variable that determines the flyout's "Fill color" color picker button visibility. </value>
+        /// <summary> Gets or sets the boolean variable that determines the flyout's "Fill color" color picker button visibility. </summary>
         public bool IsFillColorPickVisible
         {
             get { return (bool)GetValue(IsFillColorPickVisibleProperty); }
             set { SetValue(IsFillColorPickVisibleProperty, value); }
         }
 
-        /// <value> Identifies the <code>IsFillColorPickVisible</code> dependency property. </value>
+        /// <summary> Identifies the <code>IsFillColorPickVisible</code> dependency property. </summary>
         public static readonly DependencyProperty IsFillColorPickVisibleProperty =
             DependencyProperty.Register("IsFillColorPickVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-        /// <value> Gets or sets the boolean variable that determines the flyout's "layer" combo box visibility. </value>
+        /// <summary> Gets or sets the boolean variable that determines the flyout's "layer" combo box visibility. </summary>
         public bool IsLayersComboBoxVisible
         {
             get { return (bool)GetValue(IsLayersComboBoxVisibleProperty); }
             set { SetValue(IsLayersComboBoxVisibleProperty, value); }
         }
 
-        /// <value> Identifies the <code>IsLayerComboBoxVisible</code> dependency property. </value>
+        /// <summary> Identifies the <code>IsLayerComboBoxVisible</code> dependency property. </summary>
         public static readonly DependencyProperty IsLayersComboBoxVisibleProperty =
             DependencyProperty.Register("IsLayersComboBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
 
-        /// <value> Gets or sets the boolean variable that determines the flyout's "Width" number box visibility. </value>
+        /// <summary> Gets or sets the boolean variable that determines the flyout's "Width" number box visibility. </summary>
         public bool IsWidthNumberBoxVisible
         {
             get { return (bool)GetValue(IsWidthNumberBoxVisibleProperty); }
             set { SetValue(IsWidthNumberBoxVisibleProperty, value); }
         }
 
-        /// <value> Identifies the <code>IsWidthNumberBoxVisible</code> dependency property. </value>
+        /// <summary> Identifies the <code>IsWidthNumberBoxVisible</code> dependency property. </summary>
         public static readonly DependencyProperty IsWidthNumberBoxVisibleProperty =
             DependencyProperty.Register("IsWidthNumberBoxVisible", typeof(bool), typeof(AddMapElementButton), new PropertyMetadata(0));
 
@@ -285,19 +285,19 @@ namespace MapApp.Controls
     /// </summary>
     public class AddButtonClickedEventArgs : EventArgs
     {
-        /// <value> Gets the name of the added map element. </value>
+        /// <summary> Gets the name of the added map element. </summary>
         public readonly string Name;
 
-        /// <value> Gets the border (stroke) color of the added map element. </value>
+        /// <summary> Gets the border (stroke) color of the added map element. </summary>
         public readonly Color BorderColor;
 
-        /// <value> Gets the fill color of the added map element. </value>
+        /// <summary> Gets the fill color of the added map element. </summary>
         public readonly Color FillColor;
 
-        /// <value> Gets the layer of the added map element. </value>
+        /// <summary> Gets the layer of the added map element. </summary>
         public readonly MapLayerItem Layer;
 
-        /// <value> Gets the width of the added map element. </value>
+        /// <summary> Gets the width of the added map element. </summary>
         public readonly double Width;
 
         /// <summary>

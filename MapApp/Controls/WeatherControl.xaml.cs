@@ -26,7 +26,7 @@ namespace MapApp.Controls
     {
         private WeatherItem _weather;
 
-        /// <value> Gets or sets the <code>WeatherItem</code> object that contains info about the weather. </value>
+        /// <summary> Gets or sets the <code>WeatherItem</code> object that contains info about the weather. </summary>
         public WeatherItem Weather
         {
             get { return _weather; }

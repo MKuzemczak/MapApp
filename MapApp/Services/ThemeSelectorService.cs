@@ -10,17 +10,29 @@ using Windows.UI.Xaml;
 
 namespace MapApp.Services
 {
+    /// <summary>
+    /// 
+    /// </summary>
     public static class ThemeSelectorService
     {
         private const string SettingsKey = "AppBackgroundRequestedTheme";
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static ElementTheme Theme { get; set; } = ElementTheme.Default;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task InitializeAsync()
         {
             Theme = await LoadThemeFromSettingsAsync();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task SetThemeAsync(ElementTheme theme)
         {
             Theme = theme;
@@ -29,6 +41,9 @@ namespace MapApp.Services
             await SaveThemeInSettingsAsync(Theme);
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public static async Task SetRequestedThemeAsync()
         {
             foreach (var view in CoreApplication.Views)

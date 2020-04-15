@@ -20,25 +20,32 @@ using MapApp.DatabaseAccess;
 namespace MapApp.Views
 {
     /// <summary>
-    /// An empty page that can be used on its own or navigated to within a Frame.
+    /// Page that brings together MapPage and DetailsPage.
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        /// <summary>
+        /// Creates a new instance of MainPage class.
+        /// </summary>
         public MainPage()
         {
             this.InitializeComponent();
         }
 
+        /// <summary>
+        /// Called by the <b>NavigationService</b> when the page is navigated to
+        /// </summary>
+        /// <param name="e"></param>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await DatabaseAccessService.CreateDatabaseAsync();
             await mapPage.InitializeAsync();
         }
 
-        private void MapPage_MapElementClick(object sender, MapElementClickedEventArgs e)
+        private async void MapPage_MapElementClick(object sender, MapElementClickedEventArgs e)
         {
             splitView.IsPaneOpen = true;
-            detailsPage.SelectItem(e.Element);
+            await detailsPage.SelectItemAsync(e.Element);
         }
 
         private async void DetailsPage_DeleteButtonClick(object sender, EventArgs e)

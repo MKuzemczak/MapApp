@@ -15,10 +15,16 @@ namespace MapApp.Views
 {
     // TODO WTS: Add other settings as necessary. For help see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/pages/settings-codebehind.md
     // TODO WTS: Change the URL for your privacy policy in the Resource File, currently set to https://YourPrivacyUrlGoesHere
+    /// <summary>
+    /// 
+    /// </summary>
     public sealed partial class SettingsPage : Page, INotifyPropertyChanged
     {
         private ElementTheme _elementTheme = ThemeSelectorService.Theme;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public ElementTheme ElementTheme
         {
             get { return _elementTheme; }
@@ -28,6 +34,9 @@ namespace MapApp.Views
 
         private string _versionDescription;
 
+        /// <summary>
+        /// 
+        /// </summary>
         public string VersionDescription
         {
             get { return _versionDescription; }
@@ -35,11 +44,17 @@ namespace MapApp.Views
             set { Set(ref _versionDescription, value); }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public SettingsPage()
         {
             InitializeComponent();
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         protected override async void OnNavigatedTo(NavigationEventArgs e)
         {
             await InitializeAsync();
@@ -71,6 +86,9 @@ namespace MapApp.Views
             }
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
         public event PropertyChangedEventHandler PropertyChanged;
 
         private void Set<T>(ref T storage, T value, [CallerMemberName]string propertyName = null)

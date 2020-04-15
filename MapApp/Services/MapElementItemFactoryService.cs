@@ -15,8 +15,19 @@ using Windows.Foundation;
 
 namespace MapApp.Services
 {
+    /// <summary>
+    /// A factory of map element items.
+    /// </summary>
     public static class MapElementItemFactoryService
     {
+        /// <summary>
+        /// Creates a new instance of MapIconItem class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="position"></param>
+        /// <param name="layer"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static MapIconItem GetMapIconItem(string name, BasicGeoposition position, MapLayerItem layer, int id = -1)
         {
             if (string.IsNullOrEmpty(name))
@@ -45,6 +56,18 @@ namespace MapApp.Services
             };
         }
 
+        /// <summary>
+        /// Creates a new instance of MapPolylineItem class.
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="name"></param>
+        /// <param name="width"></param>
+        /// <param name="length"></param>
+        /// <param name="polygonRepresentationPath"></param>
+        /// <param name="path"></param>
+        /// <param name="layer"></param>
+        /// <param name="strokeColor"></param>
+        /// <returns></returns>
         public static MapPolylineItem GetMapPolylineItem(int id,
                                                          string name,
                                                          double width,
@@ -95,6 +118,16 @@ namespace MapApp.Services
             return result;
         }
 
+        /// <summary>
+        /// Creates a new instance of MapPolylineItem class. Calculates incomplete data.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        /// <param name="layer"></param>
+        /// <param name="strokeColor"></param>
+        /// <param name="width"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static MapPolylineItem GetMapPolylineItem(string name, IReadOnlyList<BasicGeoposition> path,
                                                          MapLayerItem layer, Color strokeColor, double width,
                                                          int id = -1)
@@ -142,6 +175,16 @@ namespace MapApp.Services
                                       strokeColor);
         }
 
+        /// <summary>
+        /// Creates a new instance of MapPolygonItem class.
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="path"></param>
+        /// <param name="layer"></param>
+        /// <param name="strokeColor"></param>
+        /// <param name="fillColor"></param>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public static MapPolygonItem GetMapPolygonItem(string name, IReadOnlyList<BasicGeoposition> path, MapLayerItem layer, Color strokeColor, Color fillColor, int id = -1)
         {
             if (string.IsNullOrEmpty(name))

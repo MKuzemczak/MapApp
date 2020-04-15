@@ -7,10 +7,19 @@ using Windows.UI;
 
 namespace MapApp.Helpers
 {
+    /// <summary>
+    /// Contains methods for converting a hex string into <b>Windows.UI.Color</b> and reverse.
+    /// </summary>
     public static class StringColorConverter
     {
+        /// <summary>Gets a string of valid hexadecimal characters</summary>
         public static string ValidHexChars = "0123456789ABCDEF";
 
+        /// <summary>
+        /// Converts and ARGB hex string into <b>Windows.UI.Color</b>.
+        /// </summary>
+        /// <param name="hexString">Hexadecimal ARGB string.</param>
+        /// <returns>Color.</returns>
         public static Color ArgbStringToColor(string hexString)
         {
             if (hexString.Length > 10)
@@ -50,6 +59,11 @@ namespace MapApp.Helpers
             return Color.FromArgb(a, r, g, b);
         }
 
+        /// <summary>
+        /// Convert a <b>Windows.UI.Color</b> into hexadecimal ARGB string.
+        /// </summary>
+        /// <param name="color">Color.</param>
+        /// <returns>Hexadecimal ARGB string.</returns>
         public static string ArgbColorToString(Color color)
         {
             string result = "";
