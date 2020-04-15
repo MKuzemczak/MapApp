@@ -17,7 +17,7 @@
         <Image x:Name="weatherIconImage"
                Grid.Column="0"/>
         <StackPanel Grid.Column="1"
-                    VerticalAlignment="Stretch" >
+                    VerticalAlignment="Center" >
             <TextBlock x:Name="tempTextBlock"
                        FontSize="45"/>
             <TextBlock x:Name="pressureTextBlock"

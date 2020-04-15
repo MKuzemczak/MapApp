@@ -148,7 +148,8 @@ namespace MapApp.Views
 
         private async Task CreateAndAddMapIconAsync(BasicGeoposition position, string title, MapLayerItem layer)
         {
-            var newItem = MapElementItemFactoryService.GetMapIconItem(title, position, layer);
+            var pos = new BasicGeoposition() { Longitude = position.Longitude, Latitude = position.Latitude };
+            var newItem = MapElementItemFactoryService.GetMapIconItem(title, pos, layer);
             AddMapElementItem(newItem);
             await DatabaseAccessService.InsertMapIconItem(newItem);
         }
@@ -350,34 +351,6 @@ namespace MapApp.Views
             }
             _mapClickWasElementClick = true;
         }
-
-        //private void EditMapElementSaveFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        //{
-        //    //if (_editedMapElement.GetType() == typeof(MapIcon))
-        //    //{
-        //    //    (_editedMapElement as MapIcon).Title = editMapElementFlyoutTextBox.Text;
-        //    //}
-        //}
-
-        //private void EditMapElementDeleteFlyoutButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
-        //{
-        //    // TODO: delete from MapElements
-        //    mapControl.MapElements.Remove(_editedMapElement);
-        //    editMapElementFlyout.Hide();
-        //}
-
-        //private void EditMapElementFlyout_Closed(object sender, object e)
-        //{
-        //    editMapElementFlyoutTextBox.Text = "";
-        //}
-
-        //private void EditMapElementFlyoutTextBox_KeyDown(object sender, Windows.UI.Xaml.Input.KeyRoutedEventArgs e)
-        //{
-        //    if (e.Key == Windows.System.VirtualKey.Enter)
-        //    {
-        //        EditMapElementSaveFlyoutButton_Click(this, new Windows.UI.Xaml.RoutedEventArgs());
-        //    }
-        //}
 
         private void Image_ImageFailed(object sender, ExceptionRoutedEventArgs e)
         {
