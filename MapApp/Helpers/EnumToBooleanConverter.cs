@@ -13,13 +13,13 @@ namespace MapApp.Helpers
         public Type EnumType { get; set; }
 
         /// <summary>
-        /// Checks if an enum is of a certain value. 
+        /// Checks if a string represents an enum value. 
         /// </summary>
-        /// <param name="value">Expected value.</param>
+        /// <param name="value">Enum value represented.</param>
         /// <param name="targetType"></param>
-        /// <param name="parameter">Checked value.</param>
+        /// <param name="parameter">Checked string representation.</param>
         /// <param name="language"></param>
-        /// <returns><b>True</b> if the checked and expected values are equal.</returns>
+        /// <returns><b>True</b> if the checked string represents the enum value.</returns>
         public object Convert(object value, Type targetType, object parameter, string language)
         {
             if (parameter is string enumString)
@@ -38,13 +38,13 @@ namespace MapApp.Helpers
         }
 
         /// <summary>
-        /// 
+        /// Converts string representation of enum value to enum value.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="targetType"></param>
         /// <param name="parameter"></param>
         /// <param name="language"></param>
-        /// <returns></returns>
+        /// <returns>Enum value represented</returns>
         public object ConvertBack(object value, Type targetType, object parameter, string language)
         {
             if (parameter is string enumString)
