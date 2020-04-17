@@ -26,6 +26,7 @@ namespace MapApp.DatabaseAccess
     {
         /// <summary> Gets or sets a boolean value that indicates if the database was initialized. </summary>
         public static bool Initialized = false;
+        public static bool Created = false;
 
         /// <summary> Gets the database file name. </summary>
         public static readonly string DBFileName = "sqlite.db";
@@ -39,7 +40,7 @@ namespace MapApp.DatabaseAccess
         /// <summary>
         /// Initializes the database.
         /// </summary>
-        private static async Task InitializeAsync()
+        public static async Task InitializeAsync()
         {
             await ApplicationData.Current.LocalFolder.CreateFileAsync(DBFileName, CreationCollisionOption.OpenIfExists);
             Initialized = true;
@@ -104,6 +105,27 @@ namespace MapApp.DatabaseAccess
                         DELETE FROM MapElement WHERE Layer_Id = OLD.Id;
                     END");
             }
+            Created = true;
+        }
+
+        /// <summary>
+        /// Deletes database file. Does nothing if the file doesn't exist.
+        /// </summary>
+        /// <returns></returns>
+        public static async Task DeleteDatabase()
+        {
+            Created = false;
+            Initialized = false;
+            StorageFile dbfile = null;
+            try
+            {
+                dbfile = await StorageFile.GetFileFromPathAsync(DbFile);
+            }
+            catch (FileNotFoundException)
+            {
+                return;
+            }
+            await dbfile.DeleteAsync();
         }
 
         /// <summary>
