@@ -12,24 +12,16 @@ namespace MapApp.Tests.MSTest.HelpersTests
     [TestClass]
     public class EnumToBooleanConverterTest
     {
-        public static EnumToBooleanConverter Converter;
+        public EnumToBooleanConverter Converter;
 
         public enum MyEnum
         {
             val1, val2, val3
         }
 
-        [ClassInitialize]
-        public static void ClassInitialize(TestContext context)
+        public EnumToBooleanConverterTest()
         {
-            Converter = new EnumToBooleanConverter()
-            { EnumType = typeof(MyEnum) };
-        }
-
-        [ClassCleanup]
-        public static void ClassCleanup()
-        {
-            Converter = null;
+            Converter = new EnumToBooleanConverter() { EnumType = typeof(MyEnum) };
         }
 
         [TestMethod]
