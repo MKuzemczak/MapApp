@@ -57,7 +57,7 @@ namespace MapApp.Views
         {
             SelectedItem = item;
             var pos = (SelectedItem as MapElementItem).GetPosition();
-            weatherControl.Weather = await WeatherService.GetAsync(pos.Latitude, pos.Longitude);
+            weatherControl.Weather = await WeatherService.GetWeatherAsync(pos.Latitude, pos.Longitude);
         }
 
         /// <summary>

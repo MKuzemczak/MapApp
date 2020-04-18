@@ -21,7 +21,7 @@ namespace MapApp.Services
         /// <param name="lat">Queried location latitude.</param>
         /// <param name="lon">Queried location longitude.</param>
         /// <returns>Object that stores retrieved data as strings.</returns>
-        public static async Task<WeatherItem> GetAsync(double lat, double lon)
+        public static async Task<WeatherItem> GetWeatherAsync(double lat, double lon)
         {
             //Create an HTTP client object
             HttpClient httpClient = new HttpClient();
