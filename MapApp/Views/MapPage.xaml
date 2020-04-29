@@ -21,37 +21,6 @@
                     <SolidColorBrush x:Key="ButtonBackgroundPressed" Color="#CC000000"/>
                 </ResourceDictionary>
             </ResourceDictionary.ThemeDictionaries>
-            
-            <!--<Flyout
-                x:Name="editMapElementFlyout"
-                x:Key="EditMapElementFlyout"
-                Placement="Bottom"
-                Closed="EditMapElementFlyout_Closed">
-                <StackPanel Width="400">
-                    <TextBlock Height="30" Text="Edit a MapElement" />
-                    <Grid >
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="4*" />
-                            <ColumnDefinition Width="*" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-                        <TextBlock Grid.Column="0" HorizontalAlignment="Right" Margin="0,5,5,0" Text="Name"/>
-                        <TextBox x:Name="editMapElementFlyoutTextBox"
-                                 KeyDown="EditMapElementFlyoutTextBox_KeyDown"
-                                 Grid.Column="1" />
-                        <Button Grid.Column="2"
-                                HorizontalAlignment="Center"
-                                Content="Save"
-                                Click="EditMapElementSaveFlyoutButton_Click" />
-                        <Button Grid.Column="3"
-                                HorizontalAlignment="Center"
-                                Content="Delete"
-                                Click="EditMapElementDeleteFlyoutButton_Click" />
-                    </Grid>
-                </StackPanel>
-            </Flyout>-->
-
         </ResourceDictionary>
     </Page.Resources>
 

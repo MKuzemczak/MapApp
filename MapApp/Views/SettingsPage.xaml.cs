@@ -13,8 +13,6 @@ using Windows.UI.Xaml.Navigation;
 
 namespace MapApp.Views
 {
-    // TODO WTS: Add other settings as necessary. For help see https://github.com/Microsoft/WindowsTemplateStudio/blob/master/docs/pages/settings-codebehind.md
-    // TODO WTS: Change the URL for your privacy policy in the Resource File, currently set to https://YourPrivacyUrlGoesHere
     /// <summary>
     /// 
     /// </summary>

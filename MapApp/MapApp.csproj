@@ -156,9 +156,6 @@
     <Compile Include="Helpers\NavHelper.cs" />
     <Compile Include="Helpers\SettingsStorageExtensions.cs" />
     <Compile Include="Helpers\StringColorConverter.cs" />
-    <Compile Include="Models\DragDropCompletedData.cs" />
-    <Compile Include="Models\DragDropData.cs" />
-    <Compile Include="Models\DragDropStartingData.cs" />
     <Compile Include="Models\MapLayerItem.cs" />
     <Compile Include="Models\MapElementItem.cs" />
     <Compile Include="Models\MapIconItem.cs" />
@@ -167,10 +164,6 @@
     <Compile Include="Models\WeatherItem.cs" />
     <Compile Include="Services\ActivationService.cs" />
     <Compile Include="Activation\DefaultActivationHandler.cs" />
-    <Compile Include="Services\DragAndDrop\DragDropService.cs" />
-    <Compile Include="Services\DragAndDrop\DropConfiguration.cs" />
-    <Compile Include="Services\DragAndDrop\ListViewDropConfiguration.cs" />
-    <Compile Include="Services\DragAndDrop\VisualDropConfiguration.cs" />
     <Compile Include="Services\LocationService.cs" />
     <Compile Include="Services\MapElementItemFactoryService.cs" />
     <Compile Include="Services\NavigationService.cs" />

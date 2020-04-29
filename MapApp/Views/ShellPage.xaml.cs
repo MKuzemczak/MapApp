@@ -17,7 +17,6 @@ using WinUI = Microsoft.UI.Xaml.Controls;
 
 namespace MapApp.Views
 {
-    // TODO WTS: Change the icons and titles for all NavigationViewItems in ShellPage.xaml.
     /// <summary>
     /// 
     /// </summary>
