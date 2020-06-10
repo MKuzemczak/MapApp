@@ -384,6 +384,7 @@ namespace MapApp.Views
             if (TmpMapElements.Contains(args.MapElements.First()))
             {
                 RemoveTmpPoint(args.MapElements.First() as MapIcon);
+                UpdateAddButtonsVisibility();
             }
             else
             {

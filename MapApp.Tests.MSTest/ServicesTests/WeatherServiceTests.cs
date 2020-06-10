@@ -75,10 +75,10 @@ namespace MapApp.Tests.MSTest.ServicesTests
                 {771, new Triple<string, string, string>("Squall", "squalls", "50d")},
                 {781, new Triple<string, string, string>("Tornado", "tornado", "50d")},
                 {800, new Triple<string, string, string>("Clear", "clear sky", "01d")},
-                {801, new Triple<string, string, string>("Clouds", "few clouds: 11-25%", "02d")},
-                {802, new Triple<string, string, string>("Clouds", "scattered clouds: 25-50%", "03d")},
-                {803, new Triple<string, string, string>("Clouds", "broken clouds: 51-84%", "04d")},
-                {804, new Triple<string, string, string>("Clouds", "overcast clouds: 85-100%", "04d")}
+                {801, new Triple<string, string, string>("Clouds", "few clouds", "02d")},
+                {802, new Triple<string, string, string>("Clouds", "scattered clouds", "03d")},
+                {803, new Triple<string, string, string>("Clouds", "broken clouds", "04d")},
+                {804, new Triple<string, string, string>("Clouds", "overcast clouds", "04d")}
             };
 
 
